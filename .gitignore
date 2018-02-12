@@ -1,22 +1,63 @@
-# Compiled class file
+
+# Eclipse project files
+.project
+.classpath
+.settings
+*.out
+# IntelliJ IDEA project files and directories
+*.iml
+*.ipr
+*.iws
+.idea/
+
+# Geany project file
+.geany
+
+# KDevelop project file and directory
+.kdev4/
+*.kdev4
+
+# Build targets
+/target
+*/target
+*.pyc
+# Report directories
+/reports
+*/reports
+**/__pycache__/*
+# Mac-specific directory that no other operating system needs.
+.DS_Store
+
+# JVM crash logs
+hs_err_pid*.log
+
+dependency-reduced-pom.xml
+
+#java
+*.o
 *.class
 
-# Log file
-*.log
+/.idea
+/nms-common/*.iml
+/nms-facade/nms-facade.iml
+/nms-service/*.iml
+/nms/.dubbo
+/nms-service/.dubbo
+app.properties.local
+### Example user template template
+### Example user template
 
-# BlueJ files
-*.ctxt
+# IntelliJ project files
+.idea
 
-# Mobile Tools for Java (J2ME)
-.mtj.tmp/
+out
+gen
+### Example user template template
+### Example user template
 
-# Package Files #
-*.jar
-*.war
-*.ear
-*.zip
-*.tar.gz
-*.rar
 
-# virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
-hs_err_pid*
+.idea/workspace.xml
+leveldb4jcore/src/main/resources/
+leveldb4jcore/target/
+/leveldb4jcore/*.iml
+/*.iml
