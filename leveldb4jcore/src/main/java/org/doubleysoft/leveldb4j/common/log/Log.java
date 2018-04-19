@@ -1,4 +1,4 @@
-package org.doubleysoft.leveldb4j.core.log;
+package org.doubleysoft.leveldb4j.common.log;
 
 /**
  * leveldb4j inner log interface
@@ -11,6 +11,8 @@ public interface Log {
      * @param msg
      */
     void warn(String msg);
+
+    void warn(String msg, Exception e);
 
     /**
      * warn log with multi param

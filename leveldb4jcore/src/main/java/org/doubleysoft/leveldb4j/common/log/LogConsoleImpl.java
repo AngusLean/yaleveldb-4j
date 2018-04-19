@@ -2,12 +2,18 @@
  * create by anguslean at 2018/2/12
  */
 
-package org.doubleysoft.leveldb4j.core.log;
+package org.doubleysoft.leveldb4j.common.log;
 
 public class LogConsoleImpl implements Log {
     @Override
     public void warn(String msg) {
         System.out.println(msg);
+    }
+
+    @Override
+    public void warn(String msg, Exception e) {
+        System.out.println(msg);
+        e.printStackTrace();
     }
 
     @Override

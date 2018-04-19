@@ -1,4 +1,4 @@
-package org.doubleysoft.leveldb4j.core.log;
+package org.doubleysoft.leveldb4j.common.log;
 
 public class LogFactory {
     public static Log getLog(Class klass) {
