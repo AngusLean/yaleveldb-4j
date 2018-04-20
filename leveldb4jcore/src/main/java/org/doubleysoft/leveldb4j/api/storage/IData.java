@@ -1,4 +1,4 @@
-package org.doubleysoft.leveldb4j.api.domain;
+package org.doubleysoft.leveldb4j.api.storage;
 
 /**
  * data inteface

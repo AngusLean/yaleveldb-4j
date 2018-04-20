@@ -1,9 +1,8 @@
 package org.doubleysoft.leveldb4j.bitcast;
 
-import org.doubleysoft.leveldb4j.api.domain.IData;
+import org.doubleysoft.leveldb4j.api.storage.IData;
 import org.doubleysoft.leveldb4j.api.exceptions.ExceptionEnum;
-import org.doubleysoft.leveldb4j.common.util.ByteUtils;
-import org.doubleysoft.leveldb4j.api.GlobalConfig;
+import org.doubleysoft.leveldb4j.GlobalConfig;
 import org.doubleysoft.leveldb4j.api.exceptions.DataAccessException;
 import org.doubleysoft.leveldb4j.common.log.Log;
 import org.doubleysoft.leveldb4j.common.log.LogFactory;

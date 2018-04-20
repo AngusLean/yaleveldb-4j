@@ -1,13 +1,16 @@
 package org.doubleysoft.leveldb4j.bitcast.index;
 
-import org.doubleysoft.leveldb4j.api.domain.IData;
+import org.doubleysoft.leveldb4j.GlobalConfig;
+import org.doubleysoft.leveldb4j.api.domain.DataIndex;
+import org.doubleysoft.leveldb4j.api.storage.IData;
 import org.doubleysoft.leveldb4j.api.index.IDbIndex;
-import org.doubleysoft.leveldb4j.api.storage.IDbFileReader;
-import org.doubleysoft.leveldb4j.api.storage.IReadData;
+import org.doubleysoft.leveldb4j.api.storage.IDbDataReader;
+import org.doubleysoft.leveldb4j.bitcast.BitCastContext;
 import org.doubleysoft.leveldb4j.bitcast.IDataKVImpl;
-import org.doubleysoft.leveldb4j.bitcast.storage.IDbFileReaderLocalImpl;
-import org.doubleysoft.leveldb4j.bitcast.storage.IReadDataImpl;
+import org.doubleysoft.leveldb4j.common.TaskManager;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
@@ -16,7 +19,12 @@ import java.util.concurrent.ConcurrentHashMap;
  * @Date 2018/4/19
  */
 public class IDbIndexImpl implements IDbIndex {
-    private ConcurrentHashMap<String, DataLocationModel> index = new ConcurrentHashMap<>();
+    private Map<String, DataIndex> index = new HashMap<>();
+    private IDbDataReader iDbDataReader;
+
+    public IDbIndexImpl(){
+        iDbDataReader = GlobalConfig.getDataReader();
+    }
 
     /**
      * find data by key
@@ -25,31 +33,30 @@ public class IDbIndexImpl implements IDbIndex {
      * @return
      */
     @Override
-    public IData findData(String key) {
-        if(!index.contains(key)){
-            return null;
+    public void findData(IData iData, String key) {
+        if(index.containsKey(key)){
+            DataIndex locationModel = index.get(key);
+            readDbFileByIndex(iData, locationModel.getFileId(), locationModel.getDataPos());
         }
-        DataLocationModel locationModel = index.get(key);
-        return null;
     }
 
-    private IData readDbFile(String fileId, long dataPos){
-        IData data = new IDataKVImpl();
-        IDbFileReader iDbFileReader = new IDbFileReaderLocalImpl(fileId);
-        IReadData iReadData = new IReadDataImpl();
-        iReadData.readData(data, iDbFileReader, dataPos);
-        return data;
+    @Override
+    public void addIndex(DataIndex dataIndex) {
+        index.put(dataIndex.getKey(), dataIndex);
     }
 
-    private class DataLocationModel {
-        /**
-         * 文件ID
-         */
-        String fileId;
-
-        /**
-         * 文件位置
-         */
-        long dataPos;
+    private void readDbFileByIndex(IData iData, String fileId, long dataPos){
+        String dbPath = BitCastContext.getINSTANCE().getActiveFilePathById(fileId);
+        iDbDataReader.readData(iData, GlobalConfig.getFileReader(dbPath), dataPos);
     }
+
+    private void saveIndexToIndexFile(DataIndex dataIndex){
+        TaskManager.addTask(new Runnable() {
+            @Override
+            public void run() {
+                BitCastContext.getINSTANCE().getIndexFilePath();
+            }
+        });
+    }
+
 }

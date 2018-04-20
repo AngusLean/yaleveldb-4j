@@ -1,10 +1,10 @@
 package org.doubleysoft.leveldb4j.bitcast.storage;
 
 import org.doubleysoft.leveldb4j.TestBase;
-import org.doubleysoft.leveldb4j.api.GlobalConfig;
-import org.doubleysoft.leveldb4j.api.domain.IData;
+import org.doubleysoft.leveldb4j.GlobalConfig;
+import org.doubleysoft.leveldb4j.api.storage.IData;
 import org.doubleysoft.leveldb4j.api.storage.IDbFileReader;
-import org.doubleysoft.leveldb4j.api.storage.IStorageData;
+import org.doubleysoft.leveldb4j.api.storage.IDbDataWriter;
 import org.doubleysoft.leveldb4j.api.storage.IDbFileWriter;
 import org.doubleysoft.leveldb4j.bitcast.IDataKVImpl;
 import org.junit.*;
@@ -16,17 +16,17 @@ import java.io.UnsupportedEncodingException;
  * @Description
  * @Date 2018/3/26
  */
-public class IStorageDataSequnceImplTest extends TestBase{
-    private IStorageData iStorageData;
+public class IDbDataWriterSequnceImplTest extends TestBase{
+    private IDbDataWriter iDbDataWriter;
     private IDbFileWriter iDbFileWriter;
     private IDbFileReader iDbFileReader;
     private String dbPath;
 
     @Before
     public void init(){
-        dbPath = getDbPath("IStorageDataSequnceImplTest");
+        dbPath = getDbPath("IDbDataWriterSequnceImplTest");
         iDbFileWriter = new IDbFileWriterLocalImpl(dbPath);
-        iStorageData = new IStorageDataSequnceImpl();
+        iDbDataWriter = new IDbDataWriterSequnceImpl();
     }
 
     @After
@@ -65,15 +65,15 @@ public class IStorageDataSequnceImplTest extends TestBase{
     private void basicTest(String key, String val){
 
         IData<String> iData = new IDataKVImpl(key,val);
-        iStorageData.saveData(iData, iDbFileWriter);
+        iDbDataWriter.saveData(iData, iDbFileWriter);
         //after write data, close stream
         iDbFileWriter.close();
 
 
-        iDbFileReader = new IDbFileReaderLocalImpl(dbPath);
-        iStorageData.readData(iData, iDbFileReader);
-        //after read, close stream
-        iDbFileReader.close();
+//        iDbFileReader = new IDbFileReaderLocalImpl(dbPath);
+//        iDbDataWriter.readData(iData, iDbFileReader);
+//        //after read, close stream
+//        iDbFileReader.close();
 
 
         Assert.assertEquals(iData.getKey(), key);

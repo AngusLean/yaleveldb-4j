@@ -1,6 +1,7 @@
 package org.doubleysoft.leveldb4j.api.index;
 
-import org.doubleysoft.leveldb4j.api.domain.IData;
+import org.doubleysoft.leveldb4j.api.domain.DataIndex;
+import org.doubleysoft.leveldb4j.api.storage.IData;
 
 /**
  * @author anguslean
@@ -14,5 +15,7 @@ public interface IDbIndex {
      * @param key
      * @return
      */
-    IData findData(String key);
+    void findData(IData iData, String key);
+
+    void addIndex( DataIndex dataIndex);
 }

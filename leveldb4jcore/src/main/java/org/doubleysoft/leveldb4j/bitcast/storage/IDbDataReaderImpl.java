@@ -1,15 +1,15 @@
 package org.doubleysoft.leveldb4j.bitcast.storage;
 
-import org.doubleysoft.leveldb4j.api.domain.IData;
+import org.doubleysoft.leveldb4j.api.storage.IData;
 import org.doubleysoft.leveldb4j.api.storage.IDbFileReader;
-import org.doubleysoft.leveldb4j.api.storage.IReadData;
+import org.doubleysoft.leveldb4j.api.storage.IDbDataReader;
 
 /**
  * @author anguslean
  * @Description
  * @Date 2018/4/19
  */
-public class IReadDataImpl implements IReadData {
+public class IDbDataReaderImpl implements IDbDataReader {
 
     /**
      * read data from db file
