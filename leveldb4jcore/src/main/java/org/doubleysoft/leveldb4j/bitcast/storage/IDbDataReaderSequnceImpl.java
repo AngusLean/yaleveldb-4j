@@ -1,24 +1,25 @@
 package org.doubleysoft.leveldb4j.bitcast.storage;
 
 import org.doubleysoft.leveldb4j.api.storage.IData;
-import org.doubleysoft.leveldb4j.api.storage.IDbFileReader;
+import org.doubleysoft.leveldb4j.bitcast.util.IDbFileReader;
 import org.doubleysoft.leveldb4j.api.storage.IDbDataReader;
+import org.doubleysoft.leveldb4j.bitcast.manager.DbFileStorageManager;
 
 /**
  * @author anguslean
  * @Description
  * @Date 2018/4/19
  */
-public class IDbDataReaderImpl implements IDbDataReader {
+public class IDbDataReaderSequnceImpl implements IDbDataReader {
 
     /**
      * read data from db file
      * @param data
-     * @param iDbFileReader
      * @return
      */
     @Override
-    public void readData(IData data, IDbFileReader iDbFileReader) {
+    public void readData(IData data) {
+        IDbFileReader iDbFileReader = DbFileStorageManager.getDbFileReader();
         if (iDbFileReader.avaliable() > 0){
             int keyLen = iDbFileReader.readInt();
             byte[] keyBytes = iDbFileReader.readBytes(keyLen);
@@ -32,8 +33,9 @@ public class IDbDataReaderImpl implements IDbDataReader {
     }
 
     @Override
-    public void readData(IData data, IDbFileReader iDbFileReader, long filePos) {
+    public void readData(IData data, long filePos) {
+        IDbFileReader iDbFileReader = DbFileStorageManager.getDbFileReader();
         iDbFileReader.seek(filePos);
-        readData(data, iDbFileReader);
+        readData(data);
     }
 }

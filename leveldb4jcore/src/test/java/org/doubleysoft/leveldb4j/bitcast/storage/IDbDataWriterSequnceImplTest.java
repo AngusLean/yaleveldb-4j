@@ -2,11 +2,12 @@ package org.doubleysoft.leveldb4j.bitcast.storage;
 
 import org.doubleysoft.leveldb4j.TestBase;
 import org.doubleysoft.leveldb4j.GlobalConfig;
-import org.doubleysoft.leveldb4j.api.storage.IData;
-import org.doubleysoft.leveldb4j.api.storage.IDbFileReader;
-import org.doubleysoft.leveldb4j.api.storage.IDbDataWriter;
-import org.doubleysoft.leveldb4j.api.storage.IDbFileWriter;
+import org.doubleysoft.leveldb4j.api.storage.*;
 import org.doubleysoft.leveldb4j.bitcast.IDataKVImpl;
+import org.doubleysoft.leveldb4j.bitcast.util.IDbFileReader;
+import org.doubleysoft.leveldb4j.bitcast.util.IDbFileWriter;
+import org.doubleysoft.leveldb4j.bitcast.util.impl.IDbFileReaderLocalImpl;
+import org.doubleysoft.leveldb4j.bitcast.util.impl.IDbFileWriterLocalImpl;
 import org.junit.*;
 
 import java.io.UnsupportedEncodingException;
@@ -18,8 +19,8 @@ import java.io.UnsupportedEncodingException;
  */
 public class IDbDataWriterSequnceImplTest extends TestBase{
     private IDbDataWriter iDbDataWriter;
+
     private IDbFileWriter iDbFileWriter;
-    private IDbFileReader iDbFileReader;
     private String dbPath;
 
     @Before
@@ -31,7 +32,7 @@ public class IDbDataWriterSequnceImplTest extends TestBase{
 
     @After
     public void clean(){
-        cleanDbPath(dbPath);
+//        cleanDbPath(dbPath);
     }
 
     @Test
@@ -65,19 +66,12 @@ public class IDbDataWriterSequnceImplTest extends TestBase{
     private void basicTest(String key, String val){
 
         IData<String> iData = new IDataKVImpl(key,val);
-        iDbDataWriter.saveData(iData, iDbFileWriter);
-        //after write data, close stream
-        iDbFileWriter.close();
+        iDbDataWriter.saveData(iData);
 
+        IData<String> newData = new IDataKVImpl(key,val);
 
-//        iDbFileReader = new IDbFileReaderLocalImpl(dbPath);
-//        iDbDataWriter.readData(iData, iDbFileReader);
-//        //after read, close stream
-//        iDbFileReader.close();
-
-
-        Assert.assertEquals(iData.getKey(), key);
-        Assert.assertEquals(iData.getVal(), val);
+        Assert.assertEquals(newData.getKey(), key);
+        Assert.assertEquals(newData.getVal(), val);
 
     }
 }

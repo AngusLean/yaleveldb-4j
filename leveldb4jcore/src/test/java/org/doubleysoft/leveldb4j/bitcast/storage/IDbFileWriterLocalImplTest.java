@@ -1,7 +1,8 @@
 package org.doubleysoft.leveldb4j.bitcast.storage;
 
 import org.doubleysoft.leveldb4j.TestBase;
-import org.doubleysoft.leveldb4j.api.storage.IDbFileWriter;
+import org.doubleysoft.leveldb4j.bitcast.util.IDbFileWriter;
+import org.doubleysoft.leveldb4j.bitcast.util.impl.IDbFileWriterLocalImpl;
 import org.doubleysoft.leveldb4j.common.util.FileUtils;
 import org.junit.*;
 

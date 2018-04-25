@@ -2,16 +2,16 @@ package org.doubleysoft.leveldb4j.bitcast.index;
 
 import org.doubleysoft.leveldb4j.GlobalConfig;
 import org.doubleysoft.leveldb4j.api.domain.DataIndex;
-import org.doubleysoft.leveldb4j.api.storage.IData;
 import org.doubleysoft.leveldb4j.api.index.IDbIndex;
+import org.doubleysoft.leveldb4j.api.storage.IData;
 import org.doubleysoft.leveldb4j.api.storage.IDbDataReader;
 import org.doubleysoft.leveldb4j.bitcast.BitCastContext;
-import org.doubleysoft.leveldb4j.bitcast.IDataKVImpl;
-import org.doubleysoft.leveldb4j.common.TaskManager;
+import org.doubleysoft.leveldb4j.bitcast.manager.DbFileStorageManager;
+import org.doubleysoft.leveldb4j.bitcast.util.IDbFileWriter;
 
+import java.io.UnsupportedEncodingException;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * @author anguslean
@@ -22,8 +22,8 @@ public class IDbIndexImpl implements IDbIndex {
     private Map<String, DataIndex> index = new HashMap<>();
     private IDbDataReader iDbDataReader;
 
-    public IDbIndexImpl(){
-        iDbDataReader = GlobalConfig.getDataReader();
+    public IDbIndexImpl() {
+        iDbDataReader = BitCastContext.getDataReader();
     }
 
     /**
@@ -34,7 +34,7 @@ public class IDbIndexImpl implements IDbIndex {
      */
     @Override
     public void findData(IData iData, String key) {
-        if(index.containsKey(key)){
+        if (index.containsKey(key)) {
             DataIndex locationModel = index.get(key);
             readDbFileByIndex(iData, locationModel.getFileId(), locationModel.getDataPos());
         }
@@ -43,20 +43,24 @@ public class IDbIndexImpl implements IDbIndex {
     @Override
     public void addIndex(DataIndex dataIndex) {
         index.put(dataIndex.getKey(), dataIndex);
+        saveIndexToIndexFile(dataIndex);
     }
 
-    private void readDbFileByIndex(IData iData, String fileId, long dataPos){
-        String dbPath = BitCastContext.getINSTANCE().getActiveFilePathById(fileId);
-        iDbDataReader.readData(iData, GlobalConfig.getFileReader(dbPath), dataPos);
+    private void readDbFileByIndex(IData iData, int fileId, long dataPos) {
+        iDbDataReader.readData(iData, dataPos);
     }
 
-    private void saveIndexToIndexFile(DataIndex dataIndex){
-        TaskManager.addTask(new Runnable() {
-            @Override
-            public void run() {
-                BitCastContext.getINSTANCE().getIndexFilePath();
-            }
-        });
+    private void saveIndexToIndexFile(DataIndex dataIndex) {
+        try {
+            IDbFileWriter indexFileWriter = DbFileStorageManager.getIDbIndexFileWriter();
+            byte[] keyBytes = dataIndex.getKey().getBytes(GlobalConfig.CHART_SET);
+            indexFileWriter.appendLong(keyBytes.length);
+            indexFileWriter.appendBytes(keyBytes);
+            indexFileWriter.appendLong(dataIndex.getDataPos());
+            indexFileWriter.appendInt(dataIndex.getFileId());
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
     }
 
 }

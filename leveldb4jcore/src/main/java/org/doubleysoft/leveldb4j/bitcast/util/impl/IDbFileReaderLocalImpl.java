@@ -1,7 +1,7 @@
-package org.doubleysoft.leveldb4j.bitcast.storage;
+package org.doubleysoft.leveldb4j.bitcast.util.impl;
 
 import org.doubleysoft.leveldb4j.api.exceptions.DataAccessException;
-import org.doubleysoft.leveldb4j.api.storage.IDbFileReader;
+import org.doubleysoft.leveldb4j.bitcast.util.IDbFileReader;
 import org.doubleysoft.leveldb4j.common.log.Log;
 import org.doubleysoft.leveldb4j.common.log.LogFactory;
 import org.doubleysoft.leveldb4j.common.util.FileUtils;
@@ -23,9 +23,8 @@ public class IDbFileReaderLocalImpl implements IDbFileReader {
 
         FileUtils.createOnNotExists(filePath);
 
-        File dbFile = new File(filePath);
-
         try {
+            File dbFile = new File(filePath);
             dbInputStream = new DataInputStream(new FileInputStream(dbFile));
         } catch (FileNotFoundException e) {
             log.warn("create db op stream fail, db not exist", e);
@@ -88,7 +87,10 @@ public class IDbFileReaderLocalImpl implements IDbFileReader {
             log.warn("read byte[] data wrong!", e);
             throw new DataAccessException("read byte[] data wrong!");
         }
+
     }
+
+
 
     @Override
     public void seek(long pos) {

@@ -7,27 +7,25 @@ package org.doubleysoft.leveldb4j.api.domain;
  */
 public class DataIndex {
     /**
-     * database file key position(seekg param in physix system)
+     * database file key position(seekg param in phosix system)
      */
     private long dataPos;
 
     /**
      * database file id
      */
-    private String fileId;
-
-
+    private int fileId;
 
     /**
      * data key
      */
     private String key;
 
-    public String getFileId() {
+    public int getFileId() {
         return fileId;
     }
 
-    public void setFileId(String fileId) {
+    public void setFileId(int fileId) {
         this.fileId = fileId;
     }
 

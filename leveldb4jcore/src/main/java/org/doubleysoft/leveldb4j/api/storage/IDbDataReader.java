@@ -10,17 +10,15 @@ public interface IDbDataReader {
     /**
      * read data from db file
      * @param data
-     * @param iDbFileReader
      * @return
      */
-    void readData(IData data, IDbFileReader iDbFileReader);
+    void readData(IData data);
 
     /**
      * read data from db file in specified position
      * @param data
-     * @param iDbFileReader
      * @param filePos begin position of data in file
      * @return
      */
-    void readData(IData data, IDbFileReader iDbFileReader, long filePos);
+    void readData(IData data, long filePos);
 }

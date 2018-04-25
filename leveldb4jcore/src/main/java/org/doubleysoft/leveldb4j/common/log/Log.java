@@ -12,6 +12,8 @@ public interface Log {
      */
     void warn(String msg);
 
+    void error(String msg);
+
     void warn(String msg, Exception e);
 
     /**

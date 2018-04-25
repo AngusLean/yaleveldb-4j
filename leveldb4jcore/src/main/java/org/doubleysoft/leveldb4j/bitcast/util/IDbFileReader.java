@@ -1,4 +1,4 @@
-package org.doubleysoft.leveldb4j.api.storage;
+package org.doubleysoft.leveldb4j.bitcast.util;
 
 /**
  * @author anguslean

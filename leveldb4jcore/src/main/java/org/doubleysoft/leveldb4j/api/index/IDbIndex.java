@@ -17,5 +17,9 @@ public interface IDbIndex {
      */
     void findData(IData iData, String key);
 
+    /**
+     * add a index
+     * @param dataIndex
+     */
     void addIndex( DataIndex dataIndex);
 }

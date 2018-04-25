@@ -12,6 +12,6 @@ public interface IDbDataWriter {
      * @param iDbFileWriter  database file writer
      */
 
-    void saveData(IData data, IDbFileWriter iDbFileWriter);
+    void saveData(IData data);
 
 }

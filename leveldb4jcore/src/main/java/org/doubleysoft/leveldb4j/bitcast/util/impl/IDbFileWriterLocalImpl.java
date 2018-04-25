@@ -1,7 +1,7 @@
-package org.doubleysoft.leveldb4j.bitcast.storage;
+package org.doubleysoft.leveldb4j.bitcast.util.impl;
 
 import org.doubleysoft.leveldb4j.api.exceptions.DataAccessException;
-import org.doubleysoft.leveldb4j.api.storage.IDbFileWriter;
+import org.doubleysoft.leveldb4j.bitcast.util.IDbFileWriter;
 import org.doubleysoft.leveldb4j.common.log.Log;
 import org.doubleysoft.leveldb4j.common.log.LogFactory;
 import org.doubleysoft.leveldb4j.common.util.FileUtils;

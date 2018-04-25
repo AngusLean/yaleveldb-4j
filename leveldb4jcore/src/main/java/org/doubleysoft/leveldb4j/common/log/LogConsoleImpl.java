@@ -11,6 +11,11 @@ public class LogConsoleImpl implements Log {
     }
 
     @Override
+    public void error(String msg) {
+        System.out.println(msg);
+    }
+
+    @Override
     public void warn(String msg, Exception e) {
         System.out.println(msg);
         e.printStackTrace();
