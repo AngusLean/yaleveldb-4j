@@ -1,13 +1,8 @@
 package org.doubleysoft.leveldb4j.bitcast;
 
-import org.doubleysoft.leveldb4j.GlobalConfig;
 import org.doubleysoft.leveldb4j.api.YaKVDb4j;
-import org.doubleysoft.leveldb4j.api.index.IDbIndex;
 import org.doubleysoft.leveldb4j.api.storage.IData;
-import org.doubleysoft.leveldb4j.api.storage.IDbDataReader;
 import org.doubleysoft.leveldb4j.api.storage.IDbDataWriter;
-import org.doubleysoft.leveldb4j.bitcast.index.IDbIndexImpl;
-import org.doubleysoft.leveldb4j.bitcast.storage.IDbDataReaderSequnceImpl;
 import org.doubleysoft.leveldb4j.bitcast.storage.IDbDataWriterSequnceImpl;
 
 /**
@@ -15,10 +10,10 @@ import org.doubleysoft.leveldb4j.bitcast.storage.IDbDataWriterSequnceImpl;
  * @Description
  * @Date 2018/4/25
  */
-public class YaKVDb4jBitCastImpl implements YaKVDb4j<String> {
+public class YakvDb4jBitCastImpl implements YaKVDb4j<String> {
     private IDbDataWriter iDbDataWriter;
 
-    public YaKVDb4jBitCastImpl(){
+    public YakvDb4jBitCastImpl() {
         iDbDataWriter = new IDbDataWriterSequnceImpl();
     }
 

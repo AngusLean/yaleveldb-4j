@@ -1,14 +1,22 @@
 package org.doubleysoft.leveldb4j.bitcast;
 
-import org.doubleysoft.leveldb4j.api.storage.IData;
-import org.doubleysoft.leveldb4j.api.exceptions.ExceptionEnum;
+import lombok.ToString;
 import org.doubleysoft.leveldb4j.GlobalConfig;
 import org.doubleysoft.leveldb4j.api.exceptions.DataAccessException;
+import org.doubleysoft.leveldb4j.api.exceptions.ExceptionEnum;
+import org.doubleysoft.leveldb4j.api.storage.IData;
 import org.doubleysoft.leveldb4j.common.log.Log;
 import org.doubleysoft.leveldb4j.common.log.LogFactory;
 
 import java.io.UnsupportedEncodingException;
 
+/**
+ * @author anguslean
+ * @Description the key-value model
+ * @Date 2018/4/19
+ */
+
+@ToString
 public class IDataKVImpl implements IData<String> {
     private static final Log log = LogFactory.getLog(IDataKVImpl.class);
 

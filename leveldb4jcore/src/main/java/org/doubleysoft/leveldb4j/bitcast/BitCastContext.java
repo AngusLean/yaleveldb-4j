@@ -1,12 +1,8 @@
 package org.doubleysoft.leveldb4j.bitcast;
 
-import org.doubleysoft.leveldb4j.GlobalConfig;
-import org.doubleysoft.leveldb4j.api.exceptions.DataAccessException;
-import org.doubleysoft.leveldb4j.api.exceptions.ExceptionEnum;
 import org.doubleysoft.leveldb4j.api.index.IDbIndex;
 import org.doubleysoft.leveldb4j.api.storage.IDbDataReader;
 import org.doubleysoft.leveldb4j.bitcast.index.IDbIndexImpl;
-import org.doubleysoft.leveldb4j.bitcast.manager.DbFileStorageManager;
 import org.doubleysoft.leveldb4j.bitcast.storage.IDbDataReaderSequnceImpl;
 
 /**

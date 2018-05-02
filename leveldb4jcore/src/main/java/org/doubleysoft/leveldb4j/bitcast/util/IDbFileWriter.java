@@ -31,4 +31,9 @@ public interface IDbFileWriter {
      * close current file channel
      */
     void close();
+
+    /**
+     * flush to file , call this after a save process complete
+     */
+    void flush();
 }

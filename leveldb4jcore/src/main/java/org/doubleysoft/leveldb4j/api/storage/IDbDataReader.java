@@ -21,4 +21,13 @@ public interface IDbDataReader {
      * @return
      */
     void readData(IData data, long filePos);
+
+    /**
+     * read data from file id db file
+     *
+     * @param data
+     * @param fileId
+     * @param filePos
+     */
+    void readData(IData data, int fileId, long filePos);
 }

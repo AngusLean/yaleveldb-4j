@@ -12,8 +12,9 @@ public interface IDbIndex {
 
     /**
      * find data by key
-     * @param key
-     * @return
+     * @param iData data object which storage finded data, if not exist, data is null
+     * @param key find key
+     * @return void
      */
     void findData(IData iData, String key);
 
@@ -22,4 +23,11 @@ public interface IDbIndex {
      * @param dataIndex
      */
     void addIndex( DataIndex dataIndex);
+
+    /**
+     * add a index and sync to file
+     *
+     * @param dataIndex
+     */
+    void syncIndex(DataIndex dataIndex);
 }

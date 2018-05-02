@@ -1,7 +1,9 @@
 package org.doubleysoft.leveldb4j.common.log;
 
 /**
- * leveldb4j inner log interface
+ * @author anguslean
+ * @Description leveldb4j inner log interface
+ * @Date 2018/4/19
  */
 public interface Log {
 
@@ -12,9 +14,28 @@ public interface Log {
      */
     void warn(String msg);
 
+    /**
+     * error log
+     *
+     * @param msg error msg
+     */
     void error(String msg);
 
+    /**
+     * warn log
+     *
+     * @param msg warn msg
+     * @param e   warn exception
+     */
     void warn(String msg, Exception e);
+
+    /**
+     * debug msg
+     *
+     * @param msg debug msg
+     */
+    void debug(String msg);
+
 
     /**
      * warn log with multi param

@@ -8,8 +8,11 @@ import org.doubleysoft.leveldb4j.common.util.FileUtils;
 
 import java.io.*;
 
+
 /**
- * local file storage
+ * @author anguslean
+ * @Description local file storage
+ * @Date 2018/4/19
  */
 public class IDbFileWriterLocalImpl implements IDbFileWriter {
 
@@ -81,6 +84,16 @@ public class IDbFileWriterLocalImpl implements IDbFileWriter {
         } catch (IOException e) {
             log.warn("close data outputstream wrong!");
             throw new DataAccessException("close data outputstream wrong!");
+        }
+    }
+
+    @Override
+    public void flush() {
+        try {
+            dbOutPutStream.flush();
+        } catch (IOException e) {
+            log.warn("flush data outputstream wrong!");
+            throw new DataAccessException("flush data outputstream wrong!");
         }
     }
 

@@ -6,9 +6,25 @@ package org.doubleysoft.leveldb4j.api.exceptions;
  * @Date 2018/3/26
  */
 public enum ExceptionEnum {
+    /**
+     * char encoding error
+     */
     CHAR_ERROR("00001","char set is wrong"),
+
+    /**
+     * can't create db file
+     */
     CAN_NOT_CREATE_DB_FILE("10001","could not create db file"),
-    DATA_IS_TOO_LONG("10002","data is too long to save");
+
+    /**
+     * data is too long to save
+     */
+    DATA_IS_TOO_LONG("10002", "data is too long to save"),
+
+    /**
+     * read key length from file error
+     */
+    READ_KEYLEN_FROM_FILE_ERROR("20003", "read key length from db file error");
 
     private String code;
     private String desc;

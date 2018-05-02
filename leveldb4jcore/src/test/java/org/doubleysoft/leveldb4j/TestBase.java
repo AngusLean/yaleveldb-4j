@@ -1,7 +1,5 @@
 package org.doubleysoft.leveldb4j;
 
-import org.junit.Assert;
-
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -14,7 +12,7 @@ import java.nio.file.Paths;
  */
 public class TestBase {
 
-    private static final String DB_PATH = "d:\\db\\";
+    private static final String DB_PATH = "./db/";
 
     protected String getDbPath(String dbName){
         File file = new File(DB_PATH);

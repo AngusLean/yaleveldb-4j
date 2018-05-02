@@ -5,7 +5,6 @@ import org.doubleysoft.leveldb4j.api.domain.DataIndex;
 import org.doubleysoft.leveldb4j.bitcast.BitCastContext;
 import org.doubleysoft.leveldb4j.bitcast.util.IDbFileReader;
 import org.doubleysoft.leveldb4j.bitcast.util.impl.IDbFileReaderLocalImpl;
-import org.doubleysoft.leveldb4j.bitcast.util.impl.IDbFileWriterLocalImpl;
 import org.doubleysoft.leveldb4j.common.log.Log;
 import org.doubleysoft.leveldb4j.common.log.LogFactory;
 
@@ -32,7 +31,7 @@ public class IDbIndexBuilder {
             try {
                 dataIndex.setKey(new String(keyBytes, GlobalConfig.CHART_SET));
             } catch (UnsupportedEncodingException e) {
-                log.error("error in read index key from file "+hintPath);
+                log.error("error read index key from file " + hintPath);
                 //ignore error index key
                 continue;
             }
@@ -40,5 +39,6 @@ public class IDbIndexBuilder {
             dataIndex.setFileId(fileId);
             BitCastContext.getDbIndex().addIndex(dataIndex);
         }
+        iDbFileReader.close();
     }
 }

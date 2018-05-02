@@ -6,12 +6,17 @@ import org.doubleysoft.leveldb4j.api.exceptions.ExceptionEnum;
 import java.io.DataInputStream;
 import java.io.FileInputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.LinkOption;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
+
+/**
+ * @author anguslean
+ * @Description base file utils
+ * @Date 2018/4/19
+ */
 public class FileUtils {
 
     public static byte[] readByteArray(String filePath, int begin, int len) throws IOException {
@@ -26,11 +31,11 @@ public class FileUtils {
                 dataInputStream.close();
             }
         }
-
     }
 
     public static void createOnNotExists(String filePath){
         Path path = Paths.get(filePath);
+
         if(Files.notExists(path,LinkOption.NOFOLLOW_LINKS)){
             try {
                 Files.createFile(path);
@@ -40,6 +45,16 @@ public class FileUtils {
         }
     }
 
+    public static void createDicIfNotExists(String dictPath) {
+        Path path = Paths.get(dictPath);
+        if (!Files.exists(path)) {
+            try {
+                Files.createDirectories(path);
+            } catch (IOException e) {
+                throw new DataAccessException(ExceptionEnum.CAN_NOT_CREATE_DB_FILE);
+            }
+        }
+    }
 
 
 }

@@ -8,6 +8,7 @@ import org.doubleysoft.leveldb4j.bitcast.util.IDbFileReader;
 import org.doubleysoft.leveldb4j.bitcast.util.IDbFileWriter;
 import org.doubleysoft.leveldb4j.bitcast.util.impl.IDbFileReaderLocalImpl;
 import org.doubleysoft.leveldb4j.bitcast.util.impl.IDbFileWriterLocalImpl;
+import org.doubleysoft.leveldb4j.common.util.FileUtils;
 
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -17,45 +18,93 @@ import java.util.concurrent.atomic.AtomicInteger;
  * @Date 2018/4/20
  */
 public class DbFileStorageManager {
-    private static String currentDbName;
-    private static String currentDbPath;
-//    private static String currentDbIndexPath;
 
+    /**
+     * current active file index
+     */
     private static AtomicInteger fileIndex;
 
+    private static String userDefinedDbPath;
+    /**
+     * current active db file name
+     */
+    private static String currentDbName;
+
+    /**
+     * current active db file path
+     */
+    private static String currentDbPath;
+
+    /**
+     * current db file reader or writer
+     */
     private static IDbFileReader iDbFileReader;
     private static IDbFileWriter iDbFileWriter;
     private static IDbFileWriter iDbIndexFileWriter;
+
+    /**
+     * current db index path
+     */
+    private static String currentDbIndexPath;
+
     /**
      * current active file size
      */
     private static long activeFileSize;
 
-    static {
-        fileIndex = new AtomicInteger();
-        currentDbName = "bc"+fileIndex.getAndIncrement();
-        currentDbPath = GlobalConfig.DB_ROOT_PATH + currentDbName;
 
-        String currentDbIndexPath = GlobalConfig.DB_ROOT_PATH + "bc.hint";
-        //init index
-        IDbIndexBuilder.buildIndexFromHint(currentDbIndexPath);
+    public static void init(String dbPath) {
+        fileIndex = new AtomicInteger();
+        userDefinedDbPath = dbPath;
+
+        activeFileSize = 0;
+
+        FileUtils.createDicIfNotExists(dbPath);
+        refreshCurrentDbFilePath();
+        initCurrentDbIndexFile();
+        initCurrentDbFileStream();
+    }
+
+    private static void initCurrentDbFileStream() {
         iDbIndexFileWriter = new IDbFileWriterLocalImpl(currentDbIndexPath);
+        iDbFileReader = new IDbFileReaderLocalImpl(currentDbPath);
+        iDbFileWriter = new IDbFileWriterLocalImpl(currentDbPath);
     }
 
     public static IDbFileReader getDbFileReader(){
-        if(iDbFileReader == null){
-            iDbFileReader = new IDbFileReaderLocalImpl(currentDbPath);
+        return iDbFileReader;
+    }
+
+    /**
+     * for seek op, recreate a read stream to avoid file point over
+     *
+     * @param pos
+     * @return
+     */
+    public static IDbFileReader resetDbFileReaderWithSeek(long pos) {
+        if (iDbFileReader != null) {
+            iDbFileReader.close();
+        }
+        iDbFileReader = new IDbFileReaderLocalImpl(currentDbPath);
+        iDbFileReader.seek(pos);
+        return iDbFileReader;
+    }
+
+    public static IDbFileReader getSpecfiedDbFileRead(long pos, int fileId) {
+       /* if(fileId == fileIndex.get()){
+            return iDbFileReader;
+        }*/
+        String dbPath = userDefinedDbPath + "bc" + fileId;
+        IDbFileReader iDbFileReader = new IDbFileReaderLocalImpl(dbPath);
+        if (pos != 0) {
+            iDbFileReader.seek(pos);
         }
         return iDbFileReader;
     }
 
     public static IDbFileWriter getDbFileWriter(){
-        if(iDbFileWriter == null){
-            iDbFileWriter = new IDbFileWriterLocalImpl(currentDbPath);
-        }
         return iDbFileWriter;
     }
-
 
     public static int getActiveFileId(){
         return fileIndex.get();
@@ -67,11 +116,11 @@ public class DbFileStorageManager {
 
 
     /**
-     * get current active file size
+     * get current active file size. call this method before write to db file
      * @param dataLen data size which will be added to current file
      * @return if current active file size greater than max file size, then a new file will be create.
      */
-    public static long getActiveFileSize(long dataLen) {
+    public static long getCurrentActiveFileSizeAndAddNewLen(long dataLen) {
         //if the data is too long to save
         if(dataLen > GlobalConfig.MAX_FILE_SIZE){
             throw new DataAccessException(ExceptionEnum.DATA_IS_TOO_LONG);
@@ -79,7 +128,8 @@ public class DbFileStorageManager {
         long val = activeFileSize;
         if(activeFileSize + dataLen > GlobalConfig.MAX_FILE_SIZE){
             // change current file path
-            refreshCurrent();
+            refreshCurrentDbFileStream();
+            activeFileSize = dataLen;
             return 0;
         }
         //set new active file size
@@ -87,8 +137,24 @@ public class DbFileStorageManager {
         return val;
     }
 
-    private static void refreshCurrent(){
-        currentDbPath = GlobalConfig.DB_ROOT_PATH + currentDbName + fileIndex.getAndIncrement();
+    public static void closeAllFile() {
+        getDbFileReader().close();
+        getDbFileWriter().close();
+        getIDbIndexFileWriter().close();
+    }
+
+    private static void refreshCurrentDbFilePath() {
+        currentDbName = "bc" + fileIndex.incrementAndGet();
+        currentDbPath = userDefinedDbPath + currentDbName;
+    }
+
+    private static void initCurrentDbIndexFile() {
+        currentDbIndexPath = userDefinedDbPath + "bc.hint";
+        IDbIndexBuilder.buildIndexFromHint(currentDbIndexPath);
+    }
+
+    private static void refreshCurrentDbFileStream() {
+        refreshCurrentDbFilePath();
         if(iDbFileReader != null){
             iDbFileReader.close();
             iDbFileReader = new IDbFileReaderLocalImpl(currentDbPath);
@@ -98,6 +164,5 @@ public class DbFileStorageManager {
             iDbFileWriter = new IDbFileWriterLocalImpl(currentDbPath);
         }
     }
-
 
 }
