@@ -14,7 +14,6 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * @author anguslean
- * @Description
  * @Date 2018/4/20
  */
 public class DbFileStorageManager {
@@ -22,13 +21,9 @@ public class DbFileStorageManager {
     /**
      * current active file index
      */
-    private static AtomicInteger fileIndex;
+    private static AtomicInteger activeFileId;
 
     private static String userDefinedDbPath;
-    /**
-     * current active db file name
-     */
-    private static String currentDbName;
 
     /**
      * current active db file path
@@ -54,7 +49,7 @@ public class DbFileStorageManager {
 
 
     public static void init(String dbPath) {
-        fileIndex = new AtomicInteger();
+        activeFileId = new AtomicInteger();
         userDefinedDbPath = dbPath;
 
         activeFileSize = 0;
@@ -90,11 +85,8 @@ public class DbFileStorageManager {
         return iDbFileReader;
     }
 
-    public static IDbFileReader getSpecfiedDbFileRead(long pos, int fileId) {
-       /* if(fileId == fileIndex.get()){
-            return iDbFileReader;
-        }*/
-        String dbPath = userDefinedDbPath + "bc" + fileId;
+    public static IDbFileReader getSpecifiedDbFileReader(long pos, int fileId) {
+        String dbPath = userDefinedDbPath + GlobalConfig.DB_FILE_NAME + fileId;
         IDbFileReader iDbFileReader = new IDbFileReaderLocalImpl(dbPath);
         if (pos != 0) {
             iDbFileReader.seek(pos);
@@ -107,7 +99,7 @@ public class DbFileStorageManager {
     }
 
     public static int getActiveFileId(){
-        return fileIndex.get();
+        return activeFileId.get();
     }
 
     public static IDbFileWriter getIDbIndexFileWriter(){
@@ -120,7 +112,7 @@ public class DbFileStorageManager {
      * @param dataLen data size which will be added to current file
      * @return if current active file size greater than max file size, then a new file will be create.
      */
-    public static long getCurrentActiveFileSizeAndAddNewLen(long dataLen) {
+    public static long getAndIncrementCurrentActiviSize(long dataLen) {
         //if the data is too long to save
         if(dataLen > GlobalConfig.MAX_FILE_SIZE){
             throw new DataAccessException(ExceptionEnum.DATA_IS_TOO_LONG);
@@ -129,6 +121,7 @@ public class DbFileStorageManager {
         if(activeFileSize + dataLen > GlobalConfig.MAX_FILE_SIZE){
             // change current file path
             refreshCurrentDbFileStream();
+            // new file current size is datalen
             activeFileSize = dataLen;
             return 0;
         }
@@ -144,12 +137,12 @@ public class DbFileStorageManager {
     }
 
     private static void refreshCurrentDbFilePath() {
-        currentDbName = "bc" + fileIndex.incrementAndGet();
+        String currentDbName = GlobalConfig.DB_FILE_NAME + activeFileId.incrementAndGet();
         currentDbPath = userDefinedDbPath + currentDbName;
     }
 
     private static void initCurrentDbIndexFile() {
-        currentDbIndexPath = userDefinedDbPath + "bc.hint";
+        currentDbIndexPath = userDefinedDbPath + GlobalConfig.DB_INDEX_NAME;
         IDbIndexBuilder.buildIndexFromHint(currentDbIndexPath);
     }
 

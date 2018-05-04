@@ -3,7 +3,6 @@ package org.doubleysoft.leveldb4j.api.storage;
 
 /**
  * @author anguslean
- * @Description read db data from files
  * @Date 2018/3/30
  */
 public interface IDbDataReader {

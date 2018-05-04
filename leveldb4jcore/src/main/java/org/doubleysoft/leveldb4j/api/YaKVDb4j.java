@@ -2,7 +2,6 @@ package org.doubleysoft.leveldb4j.api;
 
 /**
  * @author anguslean
- * @Description
  * @Date 2018/4/25
  */
 public interface YaKVDb4j<T> {

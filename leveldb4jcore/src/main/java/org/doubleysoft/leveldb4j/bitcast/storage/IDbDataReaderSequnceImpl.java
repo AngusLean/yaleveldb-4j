@@ -11,7 +11,6 @@ import org.doubleysoft.leveldb4j.common.log.LogFactory;
 
 /**
  * @author anguslean
- * @Description
  * @Date 2018/4/19
  */
 public class IDbDataReaderSequnceImpl implements IDbDataReader {
@@ -36,7 +35,7 @@ public class IDbDataReaderSequnceImpl implements IDbDataReader {
 
     @Override
     public void readData(IData data, int fileId, long filePos) {
-        IDbFileReader iDbFileReader = DbFileStorageManager.getSpecfiedDbFileRead(filePos, fileId);
+        IDbFileReader iDbFileReader = DbFileStorageManager.getSpecifiedDbFileReader(filePos, fileId);
         try {
             readData(data, iDbFileReader);
         } finally {

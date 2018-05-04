@@ -11,7 +11,6 @@ import java.io.*;
 
 /**
  * @author anguslean
- * @Description local file storage
  * @Date 2018/4/19
  */
 public class IDbFileWriterLocalImpl implements IDbFileWriter {

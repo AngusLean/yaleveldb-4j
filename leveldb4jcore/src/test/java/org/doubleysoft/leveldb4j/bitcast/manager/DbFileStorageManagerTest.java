@@ -16,7 +16,6 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * @author anguslean
- * @Description
  * @Date 2018/5/2
  */
 public class DbFileStorageManagerTest {
@@ -66,51 +65,54 @@ public class DbFileStorageManagerTest {
 
     @Test
     public void testActiveFileSize() {
-        Assert.assertEquals(0, DbFileStorageManager.getCurrentActiveFileSizeAndAddNewLen(0));
-        Assert.assertEquals(0, DbFileStorageManager.getCurrentActiveFileSizeAndAddNewLen(11));
-        Assert.assertEquals(11, DbFileStorageManager.getCurrentActiveFileSizeAndAddNewLen(12));
-        Assert.assertEquals(23, DbFileStorageManager.getCurrentActiveFileSizeAndAddNewLen(10));
-        Assert.assertNotEquals(20, DbFileStorageManager.getCurrentActiveFileSizeAndAddNewLen(12));
-        Assert.assertEquals(45, DbFileStorageManager.getCurrentActiveFileSizeAndAddNewLen(10));
-        Assert.assertEquals(55, DbFileStorageManager.getCurrentActiveFileSizeAndAddNewLen(100));
+        Assert.assertEquals(0, DbFileStorageManager.getAndIncrementCurrentActiviSize(0));
+        Assert.assertEquals(0, DbFileStorageManager.getAndIncrementCurrentActiviSize(11));
+        Assert.assertEquals(11, DbFileStorageManager.getAndIncrementCurrentActiviSize(12));
+        Assert.assertEquals(23, DbFileStorageManager.getAndIncrementCurrentActiviSize(10));
+        Assert.assertNotEquals(20, DbFileStorageManager.getAndIncrementCurrentActiviSize(12));
+        Assert.assertEquals(45, DbFileStorageManager.getAndIncrementCurrentActiviSize(10));
+        Assert.assertEquals(55, DbFileStorageManager.getAndIncrementCurrentActiviSize(100));
 
         //should create a new file and return 0
-        Assert.assertEquals(0, DbFileStorageManager.getCurrentActiveFileSizeAndAddNewLen(GlobalConfig.MAX_FILE_SIZE));
-        Assert.assertNotEquals(50, DbFileStorageManager.getCurrentActiveFileSizeAndAddNewLen(0));
-        Assert.assertEquals(0, DbFileStorageManager.getCurrentActiveFileSizeAndAddNewLen(55));
-        Assert.assertEquals(55, DbFileStorageManager.getCurrentActiveFileSizeAndAddNewLen(10));
-        Assert.assertNotEquals(55, DbFileStorageManager.getCurrentActiveFileSizeAndAddNewLen(0));
-        Assert.assertEquals(65, DbFileStorageManager.getCurrentActiveFileSizeAndAddNewLen(0));
-
+        Assert.assertEquals(0, DbFileStorageManager.getAndIncrementCurrentActiviSize(GlobalConfig.MAX_FILE_SIZE));
         Assert.assertEquals(2, DbFileStorageManager.getActiveFileId());
+
+        Assert.assertNotEquals(50, DbFileStorageManager.getAndIncrementCurrentActiviSize(0));
+        Assert.assertEquals(0, DbFileStorageManager.getAndIncrementCurrentActiviSize(55));
+        Assert.assertEquals(55, DbFileStorageManager.getAndIncrementCurrentActiviSize(10));
+        Assert.assertNotEquals(55, DbFileStorageManager.getAndIncrementCurrentActiviSize(0));
+        Assert.assertEquals(65, DbFileStorageManager.getAndIncrementCurrentActiviSize(0));
+
+        Assert.assertEquals(3, DbFileStorageManager.getActiveFileId());
     }
 
     @Test
-    public void testRefreshDbFileIndex() {
-        Assert.assertEquals(0, DbFileStorageManager.getCurrentActiveFileSizeAndAddNewLen(11));
-        Assert.assertEquals(11, DbFileStorageManager.getCurrentActiveFileSizeAndAddNewLen(11));
-        Assert.assertEquals(0, DbFileStorageManager.getCurrentActiveFileSizeAndAddNewLen(GlobalConfig.MAX_FILE_SIZE));
+    public void testRefreshDbFileActiceId() {
+        Assert.assertEquals(0, DbFileStorageManager.getAndIncrementCurrentActiviSize(11));
+        Assert.assertEquals(11, DbFileStorageManager.getAndIncrementCurrentActiviSize(11));
+        Assert.assertEquals(0, DbFileStorageManager.getAndIncrementCurrentActiviSize(GlobalConfig.MAX_FILE_SIZE));
         Assert.assertEquals(2, DbFileStorageManager.getActiveFileId());
 
         //should create a new file and return new id
-        Assert.assertEquals(0, DbFileStorageManager.getCurrentActiveFileSizeAndAddNewLen(GlobalConfig.MAX_FILE_SIZE));
-        //add a 1 byte to data, it will create a new file id
-        DbFileStorageManager.getCurrentActiveFileSizeAndAddNewLen(1);
+        Assert.assertEquals(0, DbFileStorageManager.getAndIncrementCurrentActiviSize(GlobalConfig.MAX_FILE_SIZE));
         Assert.assertEquals(3, DbFileStorageManager.getActiveFileId());
+        //add a 1 byte to data, it will create a new file id
+        DbFileStorageManager.getAndIncrementCurrentActiviSize(1);
+        Assert.assertEquals(4, DbFileStorageManager.getActiveFileId());
 
         //now insert a max length data, but it should not create a new file id
-        Assert.assertEquals(0, DbFileStorageManager.getCurrentActiveFileSizeAndAddNewLen(GlobalConfig.MAX_FILE_SIZE));
-        Assert.assertEquals(3, DbFileStorageManager.getActiveFileId());
+        Assert.assertEquals(0, DbFileStorageManager.getAndIncrementCurrentActiviSize(GlobalConfig.MAX_FILE_SIZE));
+        Assert.assertEquals(5, DbFileStorageManager.getActiveFileId());
 
         //add a 1 byte to data, it should create a new file id
-        Assert.assertEquals(0, DbFileStorageManager.getCurrentActiveFileSizeAndAddNewLen(1));
-        Assert.assertEquals(4, DbFileStorageManager.getActiveFileId());
+        Assert.assertEquals(0, DbFileStorageManager.getAndIncrementCurrentActiviSize(1));
+        Assert.assertEquals(6, DbFileStorageManager.getActiveFileId());
     }
 
     @Test
     public void testInsertTooMuchData() {
         try {
-            DbFileStorageManager.getCurrentActiveFileSizeAndAddNewLen(GlobalConfig.MAX_FILE_SIZE + 1);
+            DbFileStorageManager.getAndIncrementCurrentActiviSize(GlobalConfig.MAX_FILE_SIZE + 1);
         } catch (DataAccessException e) {
             Assert.assertEquals(e.getCode(), ExceptionEnum.DATA_IS_TOO_LONG.getCode());
         }

@@ -12,7 +12,6 @@ import java.io.UnsupportedEncodingException;
 
 /**
  * @author anguslean
- * @Description the key-value model
  * @Date 2018/4/19
  */
 

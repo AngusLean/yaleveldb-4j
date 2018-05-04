@@ -2,7 +2,6 @@ package org.doubleysoft.leveldb4j.api.exceptions;
 
 /**
  * @author yd.yu
- * @Description
  * @Date 2018/3/26
  */
 public enum ExceptionEnum {

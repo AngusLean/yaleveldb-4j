@@ -7,7 +7,6 @@ import java.nio.file.Paths;
 
 /**
  * @author anguslean
- * @Description
  * @Date 2018/3/26
  */
 public class TestBase {

@@ -2,11 +2,13 @@ package org.doubleysoft.leveldb4j.bitcast.index;
 
 import org.doubleysoft.leveldb4j.GlobalConfig;
 import org.doubleysoft.leveldb4j.api.domain.DataIndex;
+import org.doubleysoft.leveldb4j.api.exceptions.DataAccessException;
+import org.doubleysoft.leveldb4j.api.exceptions.ExceptionEnum;
 import org.doubleysoft.leveldb4j.api.index.IDbIndex;
 import org.doubleysoft.leveldb4j.api.storage.IData;
 import org.doubleysoft.leveldb4j.api.storage.IDbDataReader;
-import org.doubleysoft.leveldb4j.bitcast.BitCastContext;
 import org.doubleysoft.leveldb4j.bitcast.manager.DbFileStorageManager;
+import org.doubleysoft.leveldb4j.bitcast.storage.IDbDataReaderSequnceImpl;
 import org.doubleysoft.leveldb4j.bitcast.util.IDbFileWriter;
 import org.doubleysoft.leveldb4j.common.log.Log;
 import org.doubleysoft.leveldb4j.common.log.LogFactory;
@@ -17,17 +19,18 @@ import java.util.Map;
 
 /**
  * @author anguslean
- * @Description
  * @Date 2018/4/19
  */
 public class IDbIndexImpl implements IDbIndex {
     private static final Log log = LogFactory.getLog(IDbIndexImpl.class);
 
-    private Map<String, DataIndex> index = new HashMap<>();
+    private Map<String, DataIndex> index;
+
     private IDbDataReader iDbDataReader;
 
     public IDbIndexImpl() {
-        iDbDataReader = BitCastContext.getDataReader();
+        index = new HashMap<>();
+        iDbDataReader = new IDbDataReaderSequnceImpl();
     }
 
     /**
@@ -66,14 +69,14 @@ public class IDbIndexImpl implements IDbIndex {
     @Override
     public void syncIndex(DataIndex dataIndex) {
         addIndex(dataIndex);
-        saveIndexToIndexFile(dataIndex);
+        saveIndex2IndexFile(dataIndex);
     }
 
     private void readDbFileByIndex(IData iData, int fileId, long dataPos) {
         iDbDataReader.readData(iData, fileId, dataPos);
     }
 
-    private void saveIndexToIndexFile(DataIndex dataIndex) {
+    private void saveIndex2IndexFile(DataIndex dataIndex) {
         try {
             IDbFileWriter indexFileWriter = DbFileStorageManager.getIDbIndexFileWriter();
             byte[] keyBytes = dataIndex.getKey().getBytes(GlobalConfig.CHART_SET);
@@ -83,7 +86,8 @@ public class IDbIndexImpl implements IDbIndex {
             indexFileWriter.appendInt(dataIndex.getFileId());
             indexFileWriter.flush();
         } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
+            log.error("save index to index file error, unsupported encoding, index is " + dataIndex);
+            throw new DataAccessException(ExceptionEnum.CHAR_ERROR);
         }
     }
 

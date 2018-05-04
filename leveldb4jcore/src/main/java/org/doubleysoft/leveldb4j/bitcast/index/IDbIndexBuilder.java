@@ -12,7 +12,6 @@ import java.io.UnsupportedEncodingException;
 
 /**
  * @author anguslean
- * @Description
  * @Date 2018/4/25
  */
 public class IDbIndexBuilder {

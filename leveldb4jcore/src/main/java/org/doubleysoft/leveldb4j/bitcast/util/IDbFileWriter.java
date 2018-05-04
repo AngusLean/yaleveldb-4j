@@ -3,7 +3,6 @@ package org.doubleysoft.leveldb4j.bitcast.util;
 
 /**
  * @author anguslean
- * @Description
  * @Date 2018/3/30
  */
 public interface IDbFileWriter {

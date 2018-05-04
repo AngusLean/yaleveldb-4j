@@ -1,7 +1,8 @@
 package org.doubleysoft.leveldb4j.api.storage;
 
 /**
- * 存储数据
+ * @author anguslean
+ * storage database data interface
  */
 public interface IDbDataWriter {
 
@@ -12,6 +13,11 @@ public interface IDbDataWriter {
      * @param iDbFileWriter  database file writer
      */
 
+    /**
+     * save data to database file, this method's implementation should ensure data is saved correctly.
+     *
+     * @param data data that should be saved
+     */
     void saveData(IData data);
 
 }

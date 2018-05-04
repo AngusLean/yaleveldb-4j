@@ -14,7 +14,6 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * @author anguslean
- * @Description
  * @Date 2018/4/25
  */
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
@@ -28,7 +27,7 @@ public class YakvDb4JBitCastImplTest {
     public void init() {
         path = "./db" + atomicInteger.getAndIncrement() + "/";
         BitCastContextIniter.init(path);
-        yaKVDb4j = new YakvDb4jBitCastImpl();
+        yaKVDb4j = new YaKVDb4JBitCastImpl();
     }
 
     @After

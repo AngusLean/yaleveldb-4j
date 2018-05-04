@@ -1,19 +1,21 @@
 package org.doubleysoft.leveldb4j.bitcast;
 
 import org.doubleysoft.leveldb4j.api.index.IDbIndex;
-import org.doubleysoft.leveldb4j.api.storage.IDbDataReader;
 import org.doubleysoft.leveldb4j.bitcast.index.IDbIndexImpl;
-import org.doubleysoft.leveldb4j.bitcast.storage.IDbDataReaderSequnceImpl;
 
 /**
  * @author anguslean
- * @Description
- * @Date 2018/4/20
+ * current bitcast instance context holder
  */
+
 public class BitCastContext {
     private static IDbIndex iDbIndex;
 
-
+    /**
+     * get current instance's index, index is unique is each bitcast instance
+     *
+     * @return IDbIndex
+     */
     public static IDbIndex getDbIndex(){
         if(iDbIndex == null){
             iDbIndex = new IDbIndexImpl();
@@ -21,7 +23,4 @@ public class BitCastContext {
         return iDbIndex;
     }
 
-    public static IDbDataReader getDataReader(){
-        return new IDbDataReaderSequnceImpl();
-    }
 }

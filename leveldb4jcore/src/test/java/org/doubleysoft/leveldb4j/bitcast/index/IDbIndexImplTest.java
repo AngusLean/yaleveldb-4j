@@ -7,7 +7,6 @@ import org.junit.Test;
 
 /**
  * @author anguslean
- * @Description
  * @Date 2018/4/20
  */
 public class IDbIndexImplTest {

@@ -4,7 +4,6 @@ import java.io.Serializable;
 
 /**
  * @author anguslean
- * @Description database access exception
  * @Date 2018/4/19
  */
 public class DataAccessException extends RuntimeException implements Serializable {

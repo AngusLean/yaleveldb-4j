@@ -4,7 +4,6 @@ import lombok.Data;
 
 /**
  * @author anguslean
- * @Description
  * @Date 2018/4/20
  */
 @Data

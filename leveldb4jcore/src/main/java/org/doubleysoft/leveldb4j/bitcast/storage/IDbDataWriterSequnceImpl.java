@@ -9,24 +9,23 @@ import org.doubleysoft.leveldb4j.bitcast.util.IDbFileWriter;
 
 /**
  * @author anguslean
- * @Description data object serialize class
  * @Date 2018/4/19
  */
 
 public class IDbDataWriterSequnceImpl implements IDbDataWriter {
 
+
     /**
-     * 保存数据
-     *
-     * @param data 数据格式:
-     *             timestamp + opType + key_len + key + value_len + value
+     * save data to database file, this method's implementation should ensure data is saved correctly.
+     * timestamp + opType + key_len + key + value_len + value
+     * @param data data that should be saved
      */
     @Override
     public void saveData(IData data) {
         long dataLength = data.getKeyLen() + data.getValLen() + 8;
         //try to get current active file size, if data is too long , it will create a new file
         //call this method before write to db file
-        long dataPos = DbFileStorageManager.getCurrentActiveFileSizeAndAddNewLen(dataLength);
+        long dataPos = DbFileStorageManager.getAndIncrementCurrentActiviSize(dataLength);
 
         IDbFileWriter iDbFileWriter = DbFileStorageManager.getDbFileWriter();
         iDbFileWriter.appendInt(data.getKeyLen());

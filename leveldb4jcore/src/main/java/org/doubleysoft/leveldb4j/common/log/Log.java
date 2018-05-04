@@ -2,7 +2,6 @@ package org.doubleysoft.leveldb4j.common.log;
 
 /**
  * @author anguslean
- * @Description leveldb4j inner log interface
  * @Date 2018/4/19
  */
 public interface Log {
