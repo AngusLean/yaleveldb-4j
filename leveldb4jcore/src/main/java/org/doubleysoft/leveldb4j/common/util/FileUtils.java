@@ -19,16 +19,10 @@ import java.nio.file.Paths;
 public class FileUtils {
 
     public static byte[] readByteArray(String filePath, int begin, int len) throws IOException {
-        DataInputStream dataInputStream = null;
-        try {
-            dataInputStream = new DataInputStream(new FileInputStream(filePath));
+        try (DataInputStream dataInputStream = new DataInputStream(new FileInputStream(filePath))) {
             byte[] bytes = new byte[len];
             dataInputStream.readFully(bytes, begin, len);
             return bytes;
-        } finally {
-            if(dataInputStream != null){
-                dataInputStream.close();
-            }
         }
     }
 

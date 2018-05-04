@@ -19,8 +19,8 @@ public class YaKVDb4JBitCastImpl implements YaKVDb4j<String> {
     /**
      * add a key-value to database
      *
-     * @param key
-     * @param val
+     * @param key string key
+     * @param val string value
      */
     @Override
     public void put(String key, String val) {
@@ -31,7 +31,7 @@ public class YaKVDb4JBitCastImpl implements YaKVDb4j<String> {
     /**
      * get a value by key
      *
-     * @param key
+     * @param key string key
      * @return
      */
     @Override
@@ -42,9 +42,9 @@ public class YaKVDb4JBitCastImpl implements YaKVDb4j<String> {
     }
 
     /**
-     * delete a storaged data
+     * delete a storage data
      *
-     * @param key
+     * @param key string key
      */
     @Override
     public void delete(String key) {
