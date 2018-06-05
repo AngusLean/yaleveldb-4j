@@ -1,26 +1,15 @@
 package org.doubleysoft.leveldb4j.bitcast;
 
-import org.doubleysoft.leveldb4j.api.index.IDbIndex;
-import org.doubleysoft.leveldb4j.bitcast.index.IDbIndexImpl;
+import org.doubleysoft.leveldb4j.api.YaKVDb4j;
+import org.doubleysoft.leveldb4j.bitcast.manager.DbFileStorageManager;
 
 /**
  * @author anguslean
- * current bitcast instance context holder
+ * @Date 2018/4/26
  */
-
 public class BitCastContext {
-    private static IDbIndex iDbIndex;
-
-    /**
-     * get current instance's index, index is unique is each bitcast instance
-     *
-     * @return IDbIndex
-     */
-    public static IDbIndex getDbIndex(){
-        if(iDbIndex == null){
-            iDbIndex = new IDbIndexImpl();
-        }
-        return iDbIndex;
+    public static YaKVDb4j init(String dbPath) {
+        DbFileStorageManager.init(dbPath);
+        return new YaKVDb4JBitCastImpl();
     }
-
 }

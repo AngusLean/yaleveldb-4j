@@ -2,7 +2,7 @@ package org.doubleysoft.leveldb4j.bitcast.index;
 
 import org.doubleysoft.leveldb4j.GlobalConfig;
 import org.doubleysoft.leveldb4j.api.domain.DataIndex;
-import org.doubleysoft.leveldb4j.bitcast.BitCastContext;
+import org.doubleysoft.leveldb4j.bitcast.BitCastContainer;
 import org.doubleysoft.leveldb4j.bitcast.util.IDbFileReader;
 import org.doubleysoft.leveldb4j.bitcast.util.impl.IDbFileReaderLocalImpl;
 import org.doubleysoft.leveldb4j.common.log.Log;
@@ -36,7 +36,7 @@ public class IDbIndexBuilder {
             }
             dataIndex.setDataPos(pos);
             dataIndex.setFileId(fileId);
-            BitCastContext.getDbIndex().addIndex(dataIndex);
+            BitCastContainer.getDbIndex().addIndex(dataIndex);
         }
         iDbFileReader.close();
     }

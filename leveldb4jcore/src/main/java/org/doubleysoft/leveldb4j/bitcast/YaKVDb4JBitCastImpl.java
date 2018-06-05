@@ -37,7 +37,7 @@ public class YaKVDb4JBitCastImpl implements YaKVDb4j<String> {
     @Override
     public String get(String key) {
         IData data = new IDataKVImpl();
-        BitCastContext.getDbIndex().findData(data, key);
+        BitCastContainer.getDbIndex().findData(data, key);
         return ((IDataKVImpl) data).getVal();
     }
 

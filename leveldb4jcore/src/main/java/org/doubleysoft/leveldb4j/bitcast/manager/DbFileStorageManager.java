@@ -23,6 +23,9 @@ public class DbFileStorageManager {
      */
     private static AtomicInteger activeFileId;
 
+    /**
+     * user custom db storage path
+     */
     private static String userDefinedDbPath;
 
     /**
@@ -31,7 +34,7 @@ public class DbFileStorageManager {
     private static String currentDbPath;
 
     /**
-     * current db file reader or writer
+     * current active db file reader or writer
      */
     private static IDbFileReader iDbFileReader;
     private static IDbFileWriter iDbFileWriter;
@@ -43,7 +46,7 @@ public class DbFileStorageManager {
     private static String currentDbIndexPath;
 
     /**
-     * current active file size
+     * current active db file size
      */
     private static long activeFileSize;
 
@@ -51,7 +54,6 @@ public class DbFileStorageManager {
     public static void init(String dbPath) {
         activeFileId = new AtomicInteger();
         userDefinedDbPath = dbPath;
-
         activeFileSize = 0;
 
         FileUtils.createDicIfNotExists(dbPath);

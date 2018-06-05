@@ -3,7 +3,7 @@ package org.doubleysoft.leveldb4j.bitcast.storage;
 import org.doubleysoft.leveldb4j.api.domain.DataIndex;
 import org.doubleysoft.leveldb4j.api.storage.IData;
 import org.doubleysoft.leveldb4j.api.storage.IDbDataWriter;
-import org.doubleysoft.leveldb4j.bitcast.BitCastContext;
+import org.doubleysoft.leveldb4j.bitcast.BitCastContainer;
 import org.doubleysoft.leveldb4j.bitcast.manager.DbFileStorageManager;
 import org.doubleysoft.leveldb4j.bitcast.util.IDbFileWriter;
 
@@ -44,6 +44,6 @@ public class IDbDataWriterSequnceImpl implements IDbDataWriter {
         dataIndex.setKey(data.getKey());
         //then get newest file id
         dataIndex.setFileId(DbFileStorageManager.getActiveFileId());
-        BitCastContext.getDbIndex().syncIndex(dataIndex);
+        BitCastContainer.getDbIndex().syncIndex(dataIndex);
     }
 }

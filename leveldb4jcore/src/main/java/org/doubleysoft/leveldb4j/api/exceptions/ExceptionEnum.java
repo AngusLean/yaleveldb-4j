@@ -16,6 +16,11 @@ public enum ExceptionEnum {
     CAN_NOT_CREATE_DB_FILE("10001","could not create db file"),
 
     /**
+     * can't init db from path
+     */
+    CAN_NOT_INIT_DB_FROM_PATH("10000", "could not create db file"),
+
+    /**
      * data is too long to save
      */
     DATA_IS_TOO_LONG("10002", "data is too long to save"),

@@ -1,6 +1,5 @@
 package org.doubleysoft.leveldb4j.bitcast;
 
-import org.apache.commons.io.FileUtils;
 import org.doubleysoft.leveldb4j.GlobalConfig;
 import org.doubleysoft.leveldb4j.api.YaKVDb4j;
 import org.doubleysoft.leveldb4j.api.exceptions.DataAccessException;
@@ -8,8 +7,6 @@ import org.doubleysoft.leveldb4j.bitcast.manager.DbFileStorageManager;
 import org.junit.*;
 import org.junit.runners.MethodSorters;
 
-import java.io.File;
-import java.io.IOException;
 import java.util.concurrent.atomic.AtomicInteger;
 
 /**
@@ -26,14 +23,13 @@ public class YakvDb4JBitCastImplTest {
     @Before
     public void init() {
         path = "./db" + atomicInteger.getAndIncrement() + "/";
-        BitCastContextIniter.init(path);
-        yaKVDb4j = new YaKVDb4JBitCastImpl();
+        yaKVDb4j = BitCastContext.init(path);
     }
 
     @After
-    public void resetEnv() throws IOException {
+    public void resetEnv() {
         DbFileStorageManager.closeAllFile();
-        FileUtils.deleteDirectory(new File(path));
+//        FileUtils.deleteDirectory(new File(path));
     }
 
 
@@ -60,7 +56,7 @@ public class YakvDb4JBitCastImplTest {
         basePutAndQuery("2131", "324234");
         basePutAndQuery("2131s", "32df4234");
         basePutAndQuery("!key", "324afd234");
-        basePutAndQuery("___key", "\uE076\uE07F\uE09A\uA910");
+        basePutAndQuery("___key", "\uE076\uE07F\uE09A\uA910\uFA910");
     }
 
     @Test
