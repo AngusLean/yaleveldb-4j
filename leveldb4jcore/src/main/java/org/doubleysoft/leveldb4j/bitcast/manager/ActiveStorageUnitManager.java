@@ -1,11 +1,13 @@
 package org.doubleysoft.leveldb4j.bitcast.manager;
 
 import org.doubleysoft.leveldb4j.GlobalConfig;
+import org.doubleysoft.leveldb4j.api.exceptions.DataAccessException;
 import org.doubleysoft.leveldb4j.api.exceptions.ExceptionEnum;
 import org.doubleysoft.leveldb4j.api.exceptions.InitialDataBaseException;
 import org.doubleysoft.leveldb4j.bitcast.model.DbStorageUnitModel;
 import org.doubleysoft.leveldb4j.common.log.Log;
 import org.doubleysoft.leveldb4j.common.log.LogFactory;
+import org.doubleysoft.leveldb4j.common.util.FileUtils;
 
 import java.io.File;
 import java.io.IOException;
@@ -50,19 +52,29 @@ class ActiveStorageUnitManager {
         return instance;
     }
 
+    public DbStorageUnitModel getActiveStorageUnit() {
+        return activeStorageUnit;
+    }
+
     /**
      * get a active storage unit from db storage path, this method will
-     * iterator all files in this path, and mark the file which last number
-     * is max as latest db file, and create a model for it.
-     * if this path has't file exist, create a new storage model and new file
+     * iterator all files in this path, and mark the file which have the maxed
+     * file index,  and create a model for it.
+     * if this path cont't contain file , create a new storage model and new file
      *
      * @param relativePath
      * @return
      */
     public DbStorageUnitModel getStorageUnit(String relativePath) {
+        File targetFile = Paths.get(relativePath).toFile();
+        if (targetFile.isFile()) {
+            throw new DataAccessException(ExceptionEnum.FILE_DIRECTORY_IS_ILLEGAL);
+        }
+
         try {
+            FileUtils.createDirIfNotExists(relativePath);
             Optional<Path> latestFile = Files.list(Paths.get(relativePath))
-                    .filter(file -> GlobalConfig.DB_FILE_NAME.contains(file.toFile().getName()))
+                    .filter(file -> file.toFile().getName().contains(GlobalConfig.DB_FILE_NAME))
                     .sorted((o1, o2) -> {
                         String name1 = o1.toFile().getName();
                         String name2 = o2.toFile().getName();
@@ -77,7 +89,7 @@ class ActiveStorageUnitManager {
             }
             return getStorageModelByFile(latestFile.get().toFile());
         } catch (IOException e) {
-            log.error("error in init database from path: " + relativePath);
+            log.error("error in init database from path: " + relativePath, e);
             throw new InitialDataBaseException(ExceptionEnum.CAN_NOT_INIT_DB_FROM_PATH);
         }
     }
@@ -118,7 +130,7 @@ class ActiveStorageUnitManager {
 
         activeStorageUnit.setIndex(activeNum);
         activeStorageUnit.setName(name);
-        activeStorageUnit.setAbsPath(absPath);
+        activeStorageUnit.setAbsPath(FileUtils.getAbsPath(absPath));
         return activeStorageUnit;
     }
 
@@ -130,7 +142,7 @@ class ActiveStorageUnitManager {
 
         activeFileId.set(lastNum);
 
-        activeStorageUnit.setAbsPath(dbFile.getAbsolutePath());
+        activeStorageUnit.setAbsPath(FileUtils.getAbsPath(dbFile));
         activeStorageUnit.setName(name);
         activeStorageUnit.setIndex(lastNum);
         return activeStorageUnit;

@@ -20,7 +20,7 @@ public class IDbFileWriterLocalImpl implements IDbFileWriter {
     private DataOutputStream dbOutPutStream;
 
     public IDbFileWriterLocalImpl(String filePath) {
-        FileUtils.createOnNotExists(filePath);
+        FileUtils.createFileIfNotExists(filePath);
 
         File dbFile = new File(filePath);
 

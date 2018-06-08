@@ -8,7 +8,7 @@ import org.doubleysoft.leveldb4j.bitcast.index.IDbIndexImpl;
  * current bitcast instance context holder
  */
 
-class BitCastContainer {
+public class BitCastContainer {
     private static IDbIndex iDbIndex;
 
     /**

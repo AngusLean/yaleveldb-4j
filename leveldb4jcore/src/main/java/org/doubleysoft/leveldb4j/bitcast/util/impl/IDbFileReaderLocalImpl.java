@@ -20,7 +20,7 @@ public class IDbFileReaderLocalImpl implements IDbFileReader {
 
     public IDbFileReaderLocalImpl(String filePath) {
 
-        FileUtils.createOnNotExists(filePath);
+        FileUtils.createFileIfNotExists(filePath);
 
         try {
             File dbFile = new File(filePath);

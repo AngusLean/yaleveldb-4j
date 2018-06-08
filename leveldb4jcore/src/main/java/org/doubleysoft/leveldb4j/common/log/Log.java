@@ -20,6 +20,8 @@ public interface Log {
      */
     void error(String msg);
 
+    void error(String msg, Exception e);
+
     /**
      * warn log
      *

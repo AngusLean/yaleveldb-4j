@@ -3,8 +3,7 @@ package org.doubleysoft.leveldb4j.common.util;
 import org.doubleysoft.leveldb4j.api.exceptions.DataAccessException;
 import org.doubleysoft.leveldb4j.api.exceptions.ExceptionEnum;
 
-import java.io.DataInputStream;
-import java.io.FileInputStream;
+import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.LinkOption;
@@ -18,15 +17,7 @@ import java.nio.file.Paths;
  */
 public class FileUtils {
 
-    public static byte[] readByteArray(String filePath, int begin, int len) throws IOException {
-        try (DataInputStream dataInputStream = new DataInputStream(new FileInputStream(filePath))) {
-            byte[] bytes = new byte[len];
-            dataInputStream.readFully(bytes, begin, len);
-            return bytes;
-        }
-    }
-
-    public static void createOnNotExists(String filePath){
+    public static void createFileIfNotExists(String filePath) {
         Path path = Paths.get(filePath);
 
         if(Files.notExists(path,LinkOption.NOFOLLOW_LINKS)){
@@ -38,7 +29,7 @@ public class FileUtils {
         }
     }
 
-    public static void createDicIfNotExists(String dictPath) {
+    public static void createDirIfNotExists(String dictPath) {
         Path path = Paths.get(dictPath);
         if (!Files.exists(path)) {
             try {
@@ -49,5 +40,11 @@ public class FileUtils {
         }
     }
 
+    public static String getAbsPath(String path) {
+        return Paths.get(path).normalize().toAbsolutePath().toString();
+    }
 
+    public static String getAbsPath(File file) {
+        return getAbsPath(file.getAbsolutePath());
+    }
 }

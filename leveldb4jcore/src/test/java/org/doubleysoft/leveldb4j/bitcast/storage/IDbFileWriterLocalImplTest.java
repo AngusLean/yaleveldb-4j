@@ -3,12 +3,13 @@ package org.doubleysoft.leveldb4j.bitcast.storage;
 import org.doubleysoft.leveldb4j.TestBase;
 import org.doubleysoft.leveldb4j.bitcast.util.IDbFileWriter;
 import org.doubleysoft.leveldb4j.bitcast.util.impl.IDbFileWriterLocalImpl;
-import org.doubleysoft.leveldb4j.common.util.FileUtils;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.io.DataInputStream;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
@@ -71,10 +72,18 @@ public class IDbFileWriterLocalImplTest extends TestBase{
         testByteArrStorage(test.toString().getBytes());
     }
 
+    private static byte[] readByteArray(String filePath, int begin, int len) throws IOException {
+        try (DataInputStream dataInputStream = new DataInputStream(new FileInputStream(filePath))) {
+            byte[] bytes = new byte[len];
+            dataInputStream.readFully(bytes, begin, len);
+            return bytes;
+        }
+    }
+
     private void testByteArrStorage(byte[] bytes){
         iDbFileWriter.appendBytes(bytes);
         try {
-            byte[] readBytes = FileUtils.readByteArray(dbPath,0, bytes.length);
+            byte[] readBytes = readByteArray(dbPath, 0, bytes.length);
             Assert.assertArrayEquals(bytes, readBytes);
         } catch (IOException e) {
             e.printStackTrace();

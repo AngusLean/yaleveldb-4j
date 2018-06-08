@@ -18,7 +18,7 @@ public enum ExceptionEnum {
     /**
      * can't init db from path
      */
-    CAN_NOT_INIT_DB_FROM_PATH("10000", "could not create db file"),
+    CAN_NOT_INIT_DB_FROM_PATH("10000", "could not init db file"),
 
     /**
      * data is too long to save
@@ -28,7 +28,12 @@ public enum ExceptionEnum {
     /**
      * read key length from file error
      */
-    READ_KEYLEN_FROM_FILE_ERROR("20003", "read key length from db file error");
+    READ_KEYLEN_FROM_FILE_ERROR("20003", "read key length from db file error"),
+
+    /**
+     * file directory is illegal
+     */
+    FILE_DIRECTORY_IS_ILLEGAL("30001", "respect file directory but is file");
 
     private String code;
     private String desc;

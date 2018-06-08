@@ -1,25 +1,30 @@
 package org.doubleysoft.leveldb4j.bitcast.manager;
 
-import junit.framework.TestSuite;
+import org.doubleysoft.leveldb4j.api.YaKVDb4j;
+import org.doubleysoft.leveldb4j.bitcast.BitCastContext;
+import org.junit.Assert;
+import org.junit.Before;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
 
 public class ActiveStorageUnitManagerTest {
+    private YaKVDb4j<String> yaKVDb4j;
+    private String relativePath = "./test/";
 
-    @Test
-    public void getStorageUnit() {
+    @Before
+    public void init() {
+        yaKVDb4j = BitCastContext.init(relativePath);
     }
 
-    @Test
-    public void incrementActiveStorageUnit() {
-        TestSuite increment = new TestSuite();
-    }
+
 
     @Test
     public void getInstance() {
-        assertEquals(ActiveStorageUnitManager.getInstance(), ActiveStorageUnitManager.getInstance());
+        Assert.assertEquals(ActiveStorageUnitManager.getInstance(), ActiveStorageUnitManager.getInstance());
         assertEquals(ActiveStorageUnitManager.getInstance(), ActiveStorageUnitManager.getInstance());
         assertEquals(ActiveStorageUnitManager.getInstance(), ActiveStorageUnitManager.getInstance());
     }
+
+
 }
