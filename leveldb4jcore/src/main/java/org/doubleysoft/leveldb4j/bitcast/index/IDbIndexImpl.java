@@ -47,7 +47,7 @@ public class IDbIndexImpl implements IDbIndex {
             log.debug("index key [" + key + "] , val: " + locationModel);
             readDbFileByIndex(iData, locationModel.getFileId(), locationModel.getDataPos());
         } else {
-            log.debug(key + " does not has indexed");
+            log.debug(key + " does not been indexed");
         }
     }
 

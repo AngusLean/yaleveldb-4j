@@ -14,6 +14,8 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -23,14 +25,17 @@ import java.util.concurrent.atomic.AtomicInteger;
 class ActiveStorageUnitManager {
 
     private static final Log log = LogFactory.getLog(ActiveStorageUnitManager.class);
+    private static final Map<Integer, DbStorageUnitModel> STORAGE_CACHE = new HashMap<>(10, 1);
     /**
      * singleton
      */
     private static volatile ActiveStorageUnitManager instance;
+
     /**
      * current active file index
      */
     private AtomicInteger activeFileId;
+
     /**
      * current active storage unit
      */
@@ -52,13 +57,26 @@ class ActiveStorageUnitManager {
         return instance;
     }
 
+    /**
+     * get current active file unit
+     *
+     * @return
+     */
     public DbStorageUnitModel getActiveStorageUnit() {
         return activeStorageUnit;
     }
 
+    public DbStorageUnitModel getStorageUnitByIndex(int index) {
+        if (STORAGE_CACHE.containsKey(index)) {
+            return STORAGE_CACHE.get(index);
+        }
+        DbStorageUnitModel model = getStorageUnit("");
+        return model;
+    }
+
     /**
      * get a active storage unit from db storage path, this method will
-     * iterator all files in this path, and mark the file which have the maxed
+     * iterator all files in this path, and mark the file which have the lagest
      * file index,  and create a model for it.
      * if this path cont't contain file , create a new storage model and new file
      *
@@ -80,8 +98,7 @@ class ActiveStorageUnitManager {
                         String name2 = o2.toFile().getName();
                         //get db file last number
                         return -name1.substring(GlobalConfig.DB_FILE_NAME.length(), name1.length()).compareTo(
-                                name2.substring(GlobalConfig.DB_FILE_NAME.length(), name2.length())
-                        );
+                                name2.substring(GlobalConfig.DB_FILE_NAME.length(), name2.length()));
                     })
                     .findFirst();
             if (!latestFile.isPresent()) {
@@ -108,7 +125,7 @@ class ActiveStorageUnitManager {
         }
         String relativePath = oldUnit.getAbsPath().substring(0, oldUnit.getName().length());
         int activeNum = activeFileId.incrementAndGet();
-        String dbName = getDbName(activeNum);
+        String dbName = getDbNameByIndex(activeNum);
 
         activeStorageUnit.setAbsPath(relativePath + dbName);
         activeStorageUnit.setName(dbName);
@@ -117,7 +134,7 @@ class ActiveStorageUnitManager {
     }
 
     private DbStorageUnitModel newStorageUnit(String relativePath) {
-        String name = getDbName(activeFileId.get());
+        String name = getDbNameByIndex(activeFileId.get());
         String absPath = relativePath + name;
         int activeNum = activeFileId.get();
 
@@ -148,7 +165,7 @@ class ActiveStorageUnitManager {
         return activeStorageUnit;
     }
 
-    private String getDbName(Integer index) {
+    private String getDbNameByIndex(Integer index) {
         return GlobalConfig.DB_FILE_NAME + index;
     }
 

@@ -16,7 +16,7 @@ public class GlobalConfig {
     /**
      * global db index name
      */
-    public static final String DB_INDEX_NAME = "bc.hint";
+    public static final String DB_INDEX_FILE_NAME = "bc.hint";
 
     /**
      * global charset

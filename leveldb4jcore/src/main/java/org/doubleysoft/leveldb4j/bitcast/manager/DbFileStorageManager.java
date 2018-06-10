@@ -144,7 +144,7 @@ public class DbFileStorageManager {
     }
 
     private static void initCurrentDbIndexFile() {
-        currentDbIndexPath = userDefinedDbPath + GlobalConfig.DB_INDEX_NAME;
+        currentDbIndexPath = userDefinedDbPath + GlobalConfig.DB_INDEX_FILE_NAME;
         IDbIndexBuilder.buildIndexFromHint(currentDbIndexPath);
     }
 
