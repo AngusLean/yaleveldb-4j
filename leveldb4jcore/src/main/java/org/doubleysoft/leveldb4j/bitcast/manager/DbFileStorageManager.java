@@ -62,30 +62,11 @@ public class DbFileStorageManager {
         initCurrentDbFileStream();
     }
 
-    private static void initCurrentDbFileStream() {
-        iDbIndexFileWriter = new IDbFileWriterLocalImpl(currentDbIndexPath);
-        iDbFileReader = new IDbFileReaderLocalImpl(currentDbPath);
-        iDbFileWriter = new IDbFileWriterLocalImpl(currentDbPath);
-    }
 
     public static IDbFileReader getDbFileReader(){
         return iDbFileReader;
     }
 
-    /**
-     * for seek op, recreate a read stream to avoid file point over
-     *
-     * @param pos
-     * @return
-     */
-    public static IDbFileReader resetDbFileReaderWithSeek(long pos) {
-        if (iDbFileReader != null) {
-            iDbFileReader.close();
-        }
-        iDbFileReader = new IDbFileReaderLocalImpl(currentDbPath);
-        iDbFileReader.seek(pos);
-        return iDbFileReader;
-    }
 
     public static IDbFileReader getSpecifiedDbFileReader(long pos, int fileId) {
         String dbPath = userDefinedDbPath + GlobalConfig.DB_FILE_NAME + fileId;
@@ -96,11 +77,11 @@ public class DbFileStorageManager {
         return iDbFileReader;
     }
 
-    public static IDbFileWriter getDbFileWriter(){
+    public static IDbFileWriter getActiveDbFileWriter() {
         return iDbFileWriter;
     }
 
-    public static int getActiveFileId(){
+    public static int getActiveDbFileId() {
         return activeFileId.get();
     }
 
@@ -134,7 +115,7 @@ public class DbFileStorageManager {
 
     public static void closeAllFile() {
         getDbFileReader().close();
-        getDbFileWriter().close();
+        getActiveDbFileWriter().close();
         getIDbIndexFileWriter().close();
     }
 
@@ -146,6 +127,12 @@ public class DbFileStorageManager {
     private static void initCurrentDbIndexFile() {
         currentDbIndexPath = userDefinedDbPath + GlobalConfig.DB_INDEX_NAME;
         IDbIndexBuilder.buildIndexFromHint(currentDbIndexPath);
+    }
+
+    private static void initCurrentDbFileStream() {
+        iDbIndexFileWriter = new IDbFileWriterLocalImpl(currentDbIndexPath);
+        iDbFileReader = new IDbFileReaderLocalImpl(currentDbPath);
+        iDbFileWriter = new IDbFileWriterLocalImpl(currentDbPath);
     }
 
     private static void refreshCurrentDbFileStream() {

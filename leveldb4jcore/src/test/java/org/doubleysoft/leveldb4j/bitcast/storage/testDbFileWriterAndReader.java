@@ -76,7 +76,7 @@ public class testDbFileWriterAndReader extends TestBase {
         iDbDataWriter.saveData(iData);
 
         IData<String> newData = new IDataKVImpl();
-        iDbDataReader.readData(newData);
+        iDbDataReader.readData(newData, 0, 0);
         Assert.assertEquals(key, newData.getKey());
         Assert.assertEquals(val, newData.getVal());
 

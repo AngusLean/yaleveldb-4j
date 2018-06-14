@@ -27,14 +27,21 @@ class ActiveStorageUnitManager {
      * singleton
      */
     private static volatile ActiveStorageUnitManager instance;
+
     /**
      * current active file index
      */
     private AtomicInteger activeFileId;
+
     /**
      * current active storage unit
      */
     private DbStorageUnitModel activeStorageUnit;
+
+    /**
+     * db file path
+     */
+    private String relativePath;
 
     private ActiveStorageUnitManager() {
         activeFileId = new AtomicInteger(1);
@@ -52,6 +59,11 @@ class ActiveStorageUnitManager {
         return instance;
     }
 
+    public DbStorageUnitModel initPath(String relativePath) {
+        this.relativePath = relativePath;
+        return initActiveStorageUnit();
+    }
+
     public DbStorageUnitModel getActiveStorageUnit() {
         return activeStorageUnit;
     }
@@ -62,10 +74,9 @@ class ActiveStorageUnitManager {
      * file index,  and create a model for it.
      * if this path cont't contain file , create a new storage model and new file
      *
-     * @param relativePath
      * @return
      */
-    public DbStorageUnitModel getStorageUnit(String relativePath) {
+    private DbStorageUnitModel initActiveStorageUnit() {
         File targetFile = Paths.get(relativePath).toFile();
         if (targetFile.isFile()) {
             throw new DataAccessException(ExceptionEnum.FILE_DIRECTORY_IS_ILLEGAL);
@@ -73,19 +84,18 @@ class ActiveStorageUnitManager {
 
         try {
             FileUtils.createDirIfNotExists(relativePath);
+            //get db file last number
             Optional<Path> latestFile = Files.list(Paths.get(relativePath))
-                    .filter(file -> file.toFile().getName().contains(GlobalConfig.DB_FILE_NAME))
-                    .sorted((o1, o2) -> {
+                    .filter(file -> file.toFile().getName().contains(GlobalConfig.DB_FILE_NAME)).min((o1, o2) -> {
                         String name1 = o1.toFile().getName();
                         String name2 = o2.toFile().getName();
                         //get db file last number
                         return -name1.substring(GlobalConfig.DB_FILE_NAME.length(), name1.length()).compareTo(
                                 name2.substring(GlobalConfig.DB_FILE_NAME.length(), name2.length())
                         );
-                    })
-                    .findFirst();
+                    });
             if (!latestFile.isPresent()) {
-                return newStorageUnit(relativePath);
+                return newStorageUnit();
             }
             return getStorageModelByFile(latestFile.get().toFile());
         } catch (IOException e) {
@@ -95,7 +105,7 @@ class ActiveStorageUnitManager {
     }
 
     /**
-     * called only if current unit is full, this method will create a auto increment
+     * called when current unit is full, this method will create a auto increment
      * storage model
      *
      * @param oldUnit the old fulled unit
@@ -106,19 +116,18 @@ class ActiveStorageUnitManager {
             log.error(" illegality db storage unit instance, not latest actived.old: " + activeStorageUnit + " new :" + oldUnit);
             throw new InitialDataBaseException("illegality db storage unit instance");
         }
-        String relativePath = oldUnit.getAbsPath().substring(0, oldUnit.getName().length());
         int activeNum = activeFileId.incrementAndGet();
         String dbName = getDbName(activeNum);
 
-        activeStorageUnit.setAbsPath(relativePath + dbName);
+        activeStorageUnit.setAbsPath(getAbsPathByDbIndex(activeNum));
         activeStorageUnit.setName(dbName);
         activeStorageUnit.setIndex(activeNum);
         return activeStorageUnit;
     }
 
-    private DbStorageUnitModel newStorageUnit(String relativePath) {
+    private DbStorageUnitModel newStorageUnit() {
         String name = getDbName(activeFileId.get());
-        String absPath = relativePath + name;
+        String absPath = getAbsPathByDbIndex(activeFileId.get());
         int activeNum = activeFileId.get();
 
         try {
@@ -146,6 +155,10 @@ class ActiveStorageUnitManager {
         activeStorageUnit.setName(name);
         activeStorageUnit.setIndex(lastNum);
         return activeStorageUnit;
+    }
+
+    private String getAbsPathByDbIndex(Integer index) {
+        return relativePath + getDbName(index);
     }
 
     private String getDbName(Integer index) {

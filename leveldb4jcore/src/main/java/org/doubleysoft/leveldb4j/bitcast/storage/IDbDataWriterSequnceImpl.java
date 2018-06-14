@@ -27,7 +27,7 @@ public class IDbDataWriterSequnceImpl implements IDbDataWriter {
         //call this method before write to db file
         long dataPos = DbFileStorageManager.getAndIncrementCurrentActiviSize(dataLength);
 
-        IDbFileWriter iDbFileWriter = DbFileStorageManager.getDbFileWriter();
+        IDbFileWriter iDbFileWriter = DbFileStorageManager.getActiveDbFileWriter();
         iDbFileWriter.appendInt(data.getKeyLen());
         iDbFileWriter.appendBytes(data.getKeyBytes());
         iDbFileWriter.appendInt(data.getValLen());
@@ -43,7 +43,7 @@ public class IDbDataWriterSequnceImpl implements IDbDataWriter {
         dataIndex.setDataPos(dataPos);
         dataIndex.setKey(data.getKey());
         //then get newest file id
-        dataIndex.setFileId(DbFileStorageManager.getActiveFileId());
+        dataIndex.setFileId(DbFileStorageManager.getActiveDbFileId());
         BitCastContainer.getDbIndex().syncIndex(dataIndex);
     }
 }

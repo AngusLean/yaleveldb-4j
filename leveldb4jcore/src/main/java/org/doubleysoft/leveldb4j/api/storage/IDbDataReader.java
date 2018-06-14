@@ -11,7 +11,7 @@ public interface IDbDataReader {
      * @param data
      * @return
      */
-    void readData(IData data);
+//    void readData(IData data);
 
     /**
      * read data from db file in specified position
@@ -19,7 +19,7 @@ public interface IDbDataReader {
      * @param filePos begin position of data in file
      * @return
      */
-    void readData(IData data, long filePos);
+//    void readData(IData data, long filePos);
 
     /**
      * read data from file id db file

@@ -39,7 +39,7 @@ public class DbFileStorageManagerTest {
     public void testWriteInt() {
         int[] ints = {12, 4534, 234, Integer.MIN_VALUE, Integer.MAX_VALUE};
         for (int val : ints) {
-            DbFileStorageManager.getDbFileWriter().appendInt(val);
+            DbFileStorageManager.getActiveDbFileWriter().appendInt(val);
             Assert.assertEquals(val, DbFileStorageManager.getDbFileReader().readInt());
         }
     }
@@ -48,7 +48,7 @@ public class DbFileStorageManagerTest {
     public void testWriteLong() {
         long[] ints = {12l, 4534l, 234l, 234234l, 333333l, Long.MIN_VALUE, Long.MAX_VALUE};
         for (long val : ints) {
-            DbFileStorageManager.getDbFileWriter().appendLong(val);
+            DbFileStorageManager.getActiveDbFileWriter().appendLong(val);
             Assert.assertEquals(val, DbFileStorageManager.getDbFileReader().readLong());
         }
     }
@@ -58,7 +58,7 @@ public class DbFileStorageManagerTest {
         String[] keys = {"dsf", "1111134234", "dsfaa13sd123fs", "11~!@#$%^&*()_+?><M", "aaaaaaaaaaaaaaaaaa"};
         for (String key : keys) {
             byte[] bytes = key.getBytes(GlobalConfig.CHART_SET);
-            DbFileStorageManager.getDbFileWriter().appendBytes(bytes);
+            DbFileStorageManager.getActiveDbFileWriter().appendBytes(bytes);
             Assert.assertArrayEquals(bytes, DbFileStorageManager.getDbFileReader().readBytes(bytes.length));
         }
     }
@@ -75,7 +75,7 @@ public class DbFileStorageManagerTest {
 
         //should create a new file and return 0
         Assert.assertEquals(0, DbFileStorageManager.getAndIncrementCurrentActiviSize(GlobalConfig.MAX_FILE_SIZE));
-        Assert.assertEquals(2, DbFileStorageManager.getActiveFileId());
+        Assert.assertEquals(2, DbFileStorageManager.getActiveDbFileId());
 
         Assert.assertNotEquals(50, DbFileStorageManager.getAndIncrementCurrentActiviSize(0));
         Assert.assertEquals(0, DbFileStorageManager.getAndIncrementCurrentActiviSize(55));
@@ -83,7 +83,7 @@ public class DbFileStorageManagerTest {
         Assert.assertNotEquals(55, DbFileStorageManager.getAndIncrementCurrentActiviSize(0));
         Assert.assertEquals(65, DbFileStorageManager.getAndIncrementCurrentActiviSize(0));
 
-        Assert.assertEquals(3, DbFileStorageManager.getActiveFileId());
+        Assert.assertEquals(3, DbFileStorageManager.getActiveDbFileId());
     }
 
     @Test
@@ -91,22 +91,22 @@ public class DbFileStorageManagerTest {
         Assert.assertEquals(0, DbFileStorageManager.getAndIncrementCurrentActiviSize(11));
         Assert.assertEquals(11, DbFileStorageManager.getAndIncrementCurrentActiviSize(11));
         Assert.assertEquals(0, DbFileStorageManager.getAndIncrementCurrentActiviSize(GlobalConfig.MAX_FILE_SIZE));
-        Assert.assertEquals(2, DbFileStorageManager.getActiveFileId());
+        Assert.assertEquals(2, DbFileStorageManager.getActiveDbFileId());
 
         //should create a new file and return new id
         Assert.assertEquals(0, DbFileStorageManager.getAndIncrementCurrentActiviSize(GlobalConfig.MAX_FILE_SIZE));
-        Assert.assertEquals(3, DbFileStorageManager.getActiveFileId());
+        Assert.assertEquals(3, DbFileStorageManager.getActiveDbFileId());
         //add a 1 byte to data, it will create a new file id
         DbFileStorageManager.getAndIncrementCurrentActiviSize(1);
-        Assert.assertEquals(4, DbFileStorageManager.getActiveFileId());
+        Assert.assertEquals(4, DbFileStorageManager.getActiveDbFileId());
 
         //now insert a max length data, but it should not create a new file id
         Assert.assertEquals(0, DbFileStorageManager.getAndIncrementCurrentActiviSize(GlobalConfig.MAX_FILE_SIZE));
-        Assert.assertEquals(5, DbFileStorageManager.getActiveFileId());
+        Assert.assertEquals(5, DbFileStorageManager.getActiveDbFileId());
 
         //add a 1 byte to data, it should create a new file id
         Assert.assertEquals(0, DbFileStorageManager.getAndIncrementCurrentActiviSize(1));
-        Assert.assertEquals(6, DbFileStorageManager.getActiveFileId());
+        Assert.assertEquals(6, DbFileStorageManager.getActiveDbFileId());
     }
 
     @Test

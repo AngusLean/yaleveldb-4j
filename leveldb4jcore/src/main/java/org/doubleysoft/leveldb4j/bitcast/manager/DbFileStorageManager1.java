@@ -44,8 +44,7 @@ public class DbFileStorageManager1 {
     public static void init(String dbPath) {
         userDefinedDbPath = dbPath;
         activeFileSize = 0;
-        dbStorageUnitModel = ActiveStorageUnitManager.getInstance().getStorageUnit(dbPath);
-
+        dbStorageUnitModel = ActiveStorageUnitManager.getInstance().initPath(dbPath);
         FileUtils.createDirIfNotExists(dbPath);
         initCurrentDbFileStream(dbPath);
     }
@@ -58,21 +57,6 @@ public class DbFileStorageManager1 {
     }
 
     public static IDbFileReader getDbFileReader() {
-        return iDbFileReader;
-    }
-
-    /**
-     * for seek op, recreate a read stream to avoid file point over
-     *
-     * @param pos
-     * @return
-     */
-    public static IDbFileReader resetDbFileReaderWithSeek(long pos) {
-        if (iDbFileReader != null) {
-            iDbFileReader.close();
-        }
-        iDbFileReader = new IDbFileReaderLocalImpl(dbStorageUnitModel.getAbsPath());
-        iDbFileReader.seek(pos);
         return iDbFileReader;
     }
 
