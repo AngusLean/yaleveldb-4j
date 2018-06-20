@@ -48,7 +48,7 @@ class ActiveStorageUnitManager {
         activeStorageUnit = new DbStorageUnitModel();
     }
 
-    public static ActiveStorageUnitManager getInstance() {
+    static ActiveStorageUnitManager getInstance() {
         if (instance == null) {
             synchronized (ActiveStorageUnitManager.class) {
                 if (instance == null) {
@@ -111,7 +111,7 @@ class ActiveStorageUnitManager {
      * @param oldUnit the old fulled unit
      * @return
      */
-    public DbStorageUnitModel incrementActiveStorageUnit(DbStorageUnitModel oldUnit) {
+    public DbStorageUnitModel incActiveStorageUnit(DbStorageUnitModel oldUnit) {
         if (!activeStorageUnit.equals(oldUnit)) {
             log.error(" illegality db storage unit instance, not latest actived.old: " + activeStorageUnit + " new :" + oldUnit);
             throw new InitialDataBaseException("illegality db storage unit instance");
@@ -123,6 +123,19 @@ class ActiveStorageUnitManager {
         activeStorageUnit.setName(dbName);
         activeStorageUnit.setIndex(activeNum);
         return activeStorageUnit;
+    }
+
+    public DbStorageUnitModel getDbStorageModel(int fileId) {
+        ActiveStorageUnitManager model = new ActiveStorageUnitManager();
+        String dbName = getDbName(fileId);
+        activeStorageUnit.setAbsPath(getAbsPathByDbIndex(fileId));
+        activeStorageUnit.setName(dbName);
+        activeStorageUnit.setIndex(fileId);
+        return activeStorageUnit;
+    }
+
+    public String getDbIndexPath() {
+        return relativePath + GlobalConfig.DB_INDEX_NAME;
     }
 
     private DbStorageUnitModel newStorageUnit() {

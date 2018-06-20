@@ -9,10 +9,10 @@ import org.doubleysoft.leveldb4j.bitcast.storage.IDbDataWriterSequnceImpl;
  * @author anguslean
  * @Date 2018/4/25
  */
-public class YaKVDb4JBitCastImpl implements YaKVDb4j<String> {
+public class KvDbBitCastImpl implements YaKVDb4j<String> {
     private IDbDataWriter iDbDataWriter;
 
-    public YaKVDb4JBitCastImpl() {
+    public KvDbBitCastImpl() {
         iDbDataWriter = new IDbDataWriterSequnceImpl();
     }
 

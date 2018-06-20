@@ -29,14 +29,14 @@ public class ActiveStorageUnitBaseTest {
 
     @Test
     public void getNotExistDbfile() {
-        DbStorageUnitModel model = ActiveStorageUnitManager.getInstance().getStorageUnit(relativePath);
+        DbStorageUnitModel model = ActiveStorageUnitManager.getInstance().initPath(relativePath);
         Assert.assertEquals(1, model.getIndex());
         String abspath = Paths.get(relativePath + GlobalConfig.DB_FILE_NAME + "1").normalize().toAbsolutePath().toString();
         Assert.assertEquals(abspath, model.getAbsPath());
         Assert.assertEquals(GlobalConfig.DB_FILE_NAME + "1", model.getName());
 
         //get init model twice
-        DbStorageUnitModel model1 = ActiveStorageUnitManager.getInstance().getStorageUnit(relativePath);
+        DbStorageUnitModel model1 = ActiveStorageUnitManager.getInstance().initPath(relativePath);
         Assert.assertEquals(1, model1.getIndex());
         String abspath1 = Paths.get(relativePath + GlobalConfig.DB_FILE_NAME + "1").normalize().toAbsolutePath().toString();
         Assert.assertEquals(abspath1, model1.getAbsPath());
@@ -46,7 +46,7 @@ public class ActiveStorageUnitBaseTest {
 
     @Test
     public void getExistDbfile() {
-        DbStorageUnitModel model = ActiveStorageUnitManager.getInstance().getStorageUnit(relativePath);
+        DbStorageUnitModel model = ActiveStorageUnitManager.getInstance().initPath(relativePath);
         Assert.assertEquals(1, model.getIndex());
         String abspath = Paths.get(relativePath + GlobalConfig.DB_FILE_NAME + "1").normalize().toAbsolutePath().toString();
         Assert.assertEquals(abspath, model.getAbsPath());
@@ -56,7 +56,7 @@ public class ActiveStorageUnitBaseTest {
         yaKVDb4j.put("123e", "111");
 
         //get init model twice
-        DbStorageUnitModel model1 = ActiveStorageUnitManager.getInstance().getStorageUnit(relativePath);
+        DbStorageUnitModel model1 = ActiveStorageUnitManager.getInstance().initPath(relativePath);
         Assert.assertEquals(1, model1.getIndex());
         String abspath1 = Paths.get(relativePath + GlobalConfig.DB_FILE_NAME + "1").normalize().toAbsolutePath().toString();
         Assert.assertEquals(abspath1, model1.getAbsPath());
@@ -84,7 +84,7 @@ public class ActiveStorageUnitBaseTest {
         /**
          * init from database directory
          */
-        DbStorageUnitModel model = ActiveStorageUnitManager.getInstance().getStorageUnit(relativePath);
+        DbStorageUnitModel model = ActiveStorageUnitManager.getInstance().initPath(relativePath);
         Assert.assertEquals(model.getIndex(), 4);
         FileUtils.deleteQuietly(new File(relativePath));
     }

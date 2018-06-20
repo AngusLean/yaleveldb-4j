@@ -18,18 +18,17 @@ public class YakvDb4JBitCastImplTest {
     private YaKVDb4j yaKVDb4j;
 
     private static AtomicInteger atomicInteger = new AtomicInteger();
-    private String path = "./db/";
+    private String path = "./dbBitCastImplTest/";
 
     @Before
     public void init() {
-        path = "./db" + atomicInteger.getAndIncrement() + "/";
+        path = "./dbBitCastImplTest" + atomicInteger.getAndIncrement() + "/";
         yaKVDb4j = BitCastContext.init(path);
     }
 
     @After
     public void resetEnv() {
         DbFileStorageManager.closeAllFile();
-//        FileUtils.deleteDirectory(new File(path));
     }
 
 

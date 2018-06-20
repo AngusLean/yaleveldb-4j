@@ -27,7 +27,7 @@ public class IDbDataWriterSequnceImpl implements IDbDataWriter {
         //call this method before write to db file
         long dataPos = DbFileStorageManager.getAndIncrementCurrentActiviSize(dataLength);
 
-        IDbFileWriter iDbFileWriter = DbFileStorageManager.getActiveDbFileWriter();
+        IDbFileWriter iDbFileWriter = DbFileStorageManager.getDbFileWriter();
         iDbFileWriter.appendInt(data.getKeyLen());
         iDbFileWriter.appendBytes(data.getKeyBytes());
         iDbFileWriter.appendInt(data.getValLen());

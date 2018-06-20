@@ -4,10 +4,7 @@ import org.apache.commons.io.FileUtils;
 import org.doubleysoft.leveldb4j.GlobalConfig;
 import org.doubleysoft.leveldb4j.api.exceptions.DataAccessException;
 import org.doubleysoft.leveldb4j.api.exceptions.ExceptionEnum;
-import org.junit.After;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.*;
 
 import java.io.File;
 import java.io.IOException;
@@ -18,7 +15,7 @@ import java.util.concurrent.atomic.AtomicInteger;
  * @author anguslean
  * @Date 2018/5/2
  */
-public class DbFileStorageManagerTest {
+public class DbFileStorageManagerBaseTest {
     private static AtomicInteger atomicInteger = new AtomicInteger();
     private static String dbPath;
 
@@ -39,7 +36,7 @@ public class DbFileStorageManagerTest {
     public void testWriteInt() {
         int[] ints = {12, 4534, 234, Integer.MIN_VALUE, Integer.MAX_VALUE};
         for (int val : ints) {
-            DbFileStorageManager.getActiveDbFileWriter().appendInt(val);
+            DbFileStorageManager.getDbFileWriter().appendInt(val);
             Assert.assertEquals(val, DbFileStorageManager.getDbFileReader().readInt());
         }
     }
@@ -48,7 +45,7 @@ public class DbFileStorageManagerTest {
     public void testWriteLong() {
         long[] ints = {12l, 4534l, 234l, 234234l, 333333l, Long.MIN_VALUE, Long.MAX_VALUE};
         for (long val : ints) {
-            DbFileStorageManager.getActiveDbFileWriter().appendLong(val);
+            DbFileStorageManager.getDbFileWriter().appendLong(val);
             Assert.assertEquals(val, DbFileStorageManager.getDbFileReader().readLong());
         }
     }
@@ -58,10 +55,11 @@ public class DbFileStorageManagerTest {
         String[] keys = {"dsf", "1111134234", "dsfaa13sd123fs", "11~!@#$%^&*()_+?><M", "aaaaaaaaaaaaaaaaaa"};
         for (String key : keys) {
             byte[] bytes = key.getBytes(GlobalConfig.CHART_SET);
-            DbFileStorageManager.getActiveDbFileWriter().appendBytes(bytes);
+            DbFileStorageManager.getDbFileWriter().appendBytes(bytes);
             Assert.assertArrayEquals(bytes, DbFileStorageManager.getDbFileReader().readBytes(bytes.length));
         }
     }
+
 
     @Test
     public void testActiveFileSize() {
@@ -86,30 +84,8 @@ public class DbFileStorageManagerTest {
         Assert.assertEquals(3, DbFileStorageManager.getActiveDbFileId());
     }
 
-    @Test
-    public void testRefreshDbFileActiceId() {
-        Assert.assertEquals(0, DbFileStorageManager.getAndIncrementCurrentActiviSize(11));
-        Assert.assertEquals(11, DbFileStorageManager.getAndIncrementCurrentActiviSize(11));
-        Assert.assertEquals(0, DbFileStorageManager.getAndIncrementCurrentActiviSize(GlobalConfig.MAX_FILE_SIZE));
-        Assert.assertEquals(2, DbFileStorageManager.getActiveDbFileId());
 
-        //should create a new file and return new id
-        Assert.assertEquals(0, DbFileStorageManager.getAndIncrementCurrentActiviSize(GlobalConfig.MAX_FILE_SIZE));
-        Assert.assertEquals(3, DbFileStorageManager.getActiveDbFileId());
-        //add a 1 byte to data, it will create a new file id
-        DbFileStorageManager.getAndIncrementCurrentActiviSize(1);
-        Assert.assertEquals(4, DbFileStorageManager.getActiveDbFileId());
-
-        //now insert a max length data, but it should not create a new file id
-        Assert.assertEquals(0, DbFileStorageManager.getAndIncrementCurrentActiviSize(GlobalConfig.MAX_FILE_SIZE));
-        Assert.assertEquals(5, DbFileStorageManager.getActiveDbFileId());
-
-        //add a 1 byte to data, it should create a new file id
-        Assert.assertEquals(0, DbFileStorageManager.getAndIncrementCurrentActiviSize(1));
-        Assert.assertEquals(6, DbFileStorageManager.getActiveDbFileId());
-    }
-
-    @Test
+    @Ignore
     public void testInsertTooMuchData() {
         try {
             DbFileStorageManager.getAndIncrementCurrentActiviSize(GlobalConfig.MAX_FILE_SIZE + 1);

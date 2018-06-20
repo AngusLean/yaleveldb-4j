@@ -10,6 +10,6 @@ import org.doubleysoft.leveldb4j.bitcast.manager.DbFileStorageManager;
 public class BitCastContext {
     public static YaKVDb4j init(String dbPath) {
         DbFileStorageManager.init(dbPath);
-        return new YaKVDb4JBitCastImpl();
+        return new KvDbBitCastImpl();
     }
 }
