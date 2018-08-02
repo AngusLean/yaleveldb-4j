@@ -135,7 +135,7 @@ class ActiveStorageUnitManager {
     }
 
     public String getDbIndexPath() {
-        return relativePath + GlobalConfig.DB_INDEX_NAME;
+        return relativePath + GlobalConfig.DB_INDEX_FILE_NAME;
     }
 
     private DbStorageUnitModel newStorageUnit() {
