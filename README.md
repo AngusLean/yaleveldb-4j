@@ -1,4 +1,5 @@
 [![](https://travis-ci.org/AngusLean/yaleveldb-4j.svg?branch=master)](https://travis-ci.org/AngusLean/yaleveldb-4j)
+[![codecov](https://codecov.io/gh/AngusLean/yaleveldb-4j/branch/master/graph/badge.svg)](https://codecov.io/gh/AngusLean/yaleveldb-4j)
 
 ## yaleveldb-4j
 yet another leveldb for Java, is a simple key-value database, it try
