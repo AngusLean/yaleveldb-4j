@@ -1,3 +1,5 @@
+[![](https://travis-ci.org/AngusLean/yaleveldb-4j.svg?branch=master)](https://travis-ci.org/AngusLean/yaleveldb-4j)
+
 ## yaleveldb-4j
 yet another leveldb for Java, is a simple key-value database, it try
 to support key-value database operator as simple as possible.
