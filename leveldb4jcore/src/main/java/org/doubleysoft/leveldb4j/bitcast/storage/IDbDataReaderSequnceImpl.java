@@ -21,17 +21,17 @@ public class IDbDataReaderSequnceImpl implements IDbDataReader {
      * @param data
      * @return
      */
-    @Override
+/*    @Override
     public void readData(IData data) {
         readData(data, DbFileStorageManager.getDbFileReader());
-    }
+    }*/
 
-    @Override
+/*    @Override
     public void readData(IData data, long seekPos) {
         log.debug("read data: [" + data + "] from db file, seek is " + seekPos);
         IDbFileReader iDbFileReader = DbFileStorageManager.resetDbFileReaderWithSeek(seekPos);
         readData(data, iDbFileReader);
-    }
+    }*/
 
     @Override
     public void readData(IData data, int fileId, long filePos) {

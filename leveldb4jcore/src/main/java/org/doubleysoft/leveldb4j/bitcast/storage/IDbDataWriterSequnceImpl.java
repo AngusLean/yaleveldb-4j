@@ -43,7 +43,7 @@ public class IDbDataWriterSequnceImpl implements IDbDataWriter {
         dataIndex.setDataPos(dataPos);
         dataIndex.setKey(data.getKey());
         //then get newest file id
-        dataIndex.setFileId(DbFileStorageManager.getActiveFileId());
+        dataIndex.setFileId(DbFileStorageManager.getActiveDbFileId());
         BitCastContainer.getDbIndex().syncIndex(dataIndex);
     }
 }

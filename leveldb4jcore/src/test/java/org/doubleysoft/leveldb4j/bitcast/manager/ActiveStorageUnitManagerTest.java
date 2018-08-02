@@ -17,8 +17,6 @@ public class ActiveStorageUnitManagerTest {
         yaKVDb4j = BitCastContext.init(relativePath);
     }
 
-
-
     @Test
     public void getInstance() {
         Assert.assertEquals(ActiveStorageUnitManager.getInstance(), ActiveStorageUnitManager.getInstance());
