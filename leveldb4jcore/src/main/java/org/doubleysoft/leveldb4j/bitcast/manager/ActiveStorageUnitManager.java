@@ -85,7 +85,7 @@ class ActiveStorageUnitManager {
         try {
             FileUtils.createDirIfNotExists(relativePath);
             //get db file last number
-            Optional<Path> latestFile = Files.list(Paths.get(relativePath))
+            Optional<Path> lastFile = Files.list(Paths.get(relativePath))
                     .filter(file -> file.toFile().getName().contains(GlobalConfig.DB_FILE_NAME)).min((o1, o2) -> {
                         String name1 = o1.toFile().getName();
                         String name2 = o2.toFile().getName();
@@ -94,10 +94,10 @@ class ActiveStorageUnitManager {
                                 name2.substring(GlobalConfig.DB_FILE_NAME.length(), name2.length())
                         );
                     });
-            if (!latestFile.isPresent()) {
-                return newStorageUnit();
+            if (lastFile.isPresent()) {
+                return getStorageModelByFile(lastFile.get().toFile());
             }
-            return getStorageModelByFile(latestFile.get().toFile());
+            return newStorageUnit();
         } catch (IOException e) {
             log.error("error in init database from path: " + relativePath, e);
             throw new InitialDataBaseException(ExceptionEnum.CAN_NOT_INIT_DB_FROM_PATH);
@@ -139,6 +139,7 @@ class ActiveStorageUnitManager {
     }
 
     private DbStorageUnitModel newStorageUnit() {
+        activeFileId.set(1);
         String name = getDbName(activeFileId.get());
         String absPath = getAbsPathByDbIndex(activeFileId.get());
         int activeNum = activeFileId.get();
@@ -149,7 +150,6 @@ class ActiveStorageUnitManager {
             log.error("error in create a new db storage file in path : " + relativePath);
             throw new InitialDataBaseException(ExceptionEnum.CAN_NOT_CREATE_DB_FILE);
         }
-
         activeStorageUnit.setIndex(activeNum);
         activeStorageUnit.setName(name);
         activeStorageUnit.setAbsPath(FileUtils.getAbsPath(absPath));

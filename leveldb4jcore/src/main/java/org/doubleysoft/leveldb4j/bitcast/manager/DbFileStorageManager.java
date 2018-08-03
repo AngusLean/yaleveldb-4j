@@ -34,10 +34,10 @@ public class DbFileStorageManager {
         activeFileSize = 0;
         dbStorageUnitModel = ActiveStorageUnitManager.getInstance().initPath(dbPath);
         FileUtils.createDirIfNotExists(dbPath);
-        initCurrentDbFileStream(dbPath);
+        initCurrentDbFileStream();
     }
 
-    private static void initCurrentDbFileStream(String relativePath) {
+    private static void initCurrentDbFileStream() {
         String crtPath = dbStorageUnitModel.getAbsPath();
         iDbIndexFileWriter = new IDbFileWriterLocalImpl(ActiveStorageUnitManager.getInstance().getDbIndexPath());
         iDbFileReader = new IDbFileReaderLocalImpl(crtPath);
@@ -77,7 +77,7 @@ public class DbFileStorageManager {
      * @param dataLen data size which will be added to current file
      * @return if current active file size greater than max file size, then a new file will be create.
      */
-    public static long getAndIncrementCurrentActiviSize(long dataLen) {
+    public static synchronized long getAndIncrementCurrentActiveSize(long dataLen) {
         //if the data is too long to save
         if (dataLen > GlobalConfig.MAX_FILE_SIZE) {
             throw new DataAccessException(ExceptionEnum.DATA_IS_TOO_LONG);

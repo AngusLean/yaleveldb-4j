@@ -18,8 +18,8 @@ import java.util.Random;
 
 import static org.junit.Assert.assertEquals;
 
+@SuppressWarnings("unchecked")
 public class ActiveStorageUnitBaseTest {
-    //    private String relativePath = StorageUtil.getTestBaseDir();
     private String relativePath = "./test/";
 
     @AfterClass

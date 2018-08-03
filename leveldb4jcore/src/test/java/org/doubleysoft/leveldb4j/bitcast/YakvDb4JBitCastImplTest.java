@@ -15,6 +15,7 @@ import java.util.concurrent.atomic.AtomicInteger;
  * @author anguslean
  * @Date 2018/4/25
  */
+@SuppressWarnings("unchecked")
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class YakvDb4JBitCastImplTest {
     private YaKVDb4j yaKVDb4j;

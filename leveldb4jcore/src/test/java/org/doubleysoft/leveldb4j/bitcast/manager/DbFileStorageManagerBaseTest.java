@@ -4,7 +4,10 @@ import org.apache.commons.io.FileUtils;
 import org.doubleysoft.leveldb4j.GlobalConfig;
 import org.doubleysoft.leveldb4j.api.exceptions.DataAccessException;
 import org.doubleysoft.leveldb4j.api.exceptions.ExceptionEnum;
-import org.junit.*;
+import org.junit.After;
+import org.junit.Assert;
+import org.junit.Before;
+import org.junit.Test;
 
 import java.io.File;
 import java.io.IOException;
@@ -22,7 +25,7 @@ public class DbFileStorageManagerBaseTest {
 
     @Before
     public void initDbFileStorageManager() {
-        dbPath = "./db" + atomicInteger.getAndIncrement() + "/";
+        dbPath = "./dbmb" + atomicInteger.getAndIncrement() + "/";
         DbFileStorageManager.init(dbPath);
     }
 
@@ -63,32 +66,32 @@ public class DbFileStorageManagerBaseTest {
 
     @Test
     public void testActiveFileSize() {
-        Assert.assertEquals(0, DbFileStorageManager.getAndIncrementCurrentActiviSize(0));
-        Assert.assertEquals(0, DbFileStorageManager.getAndIncrementCurrentActiviSize(11));
-        Assert.assertEquals(11, DbFileStorageManager.getAndIncrementCurrentActiviSize(12));
-        Assert.assertEquals(23, DbFileStorageManager.getAndIncrementCurrentActiviSize(10));
-        Assert.assertNotEquals(20, DbFileStorageManager.getAndIncrementCurrentActiviSize(12));
-        Assert.assertEquals(45, DbFileStorageManager.getAndIncrementCurrentActiviSize(10));
-        Assert.assertEquals(55, DbFileStorageManager.getAndIncrementCurrentActiviSize(100));
+        Assert.assertEquals(0, DbFileStorageManager.getAndIncrementCurrentActiveSize(0));
+        Assert.assertEquals(0, DbFileStorageManager.getAndIncrementCurrentActiveSize(11));
+        Assert.assertEquals(11, DbFileStorageManager.getAndIncrementCurrentActiveSize(12));
+        Assert.assertEquals(23, DbFileStorageManager.getAndIncrementCurrentActiveSize(10));
+        Assert.assertNotEquals(20, DbFileStorageManager.getAndIncrementCurrentActiveSize(12));
+        Assert.assertEquals(45, DbFileStorageManager.getAndIncrementCurrentActiveSize(10));
+        Assert.assertEquals(55, DbFileStorageManager.getAndIncrementCurrentActiveSize(100));
 
         //should create a new file and return 0
-        Assert.assertEquals(0, DbFileStorageManager.getAndIncrementCurrentActiviSize(GlobalConfig.MAX_FILE_SIZE));
+        Assert.assertEquals(0, DbFileStorageManager.getAndIncrementCurrentActiveSize(GlobalConfig.MAX_FILE_SIZE));
         Assert.assertEquals(2, DbFileStorageManager.getActiveDbFileId());
 
-        Assert.assertNotEquals(50, DbFileStorageManager.getAndIncrementCurrentActiviSize(0));
-        Assert.assertEquals(0, DbFileStorageManager.getAndIncrementCurrentActiviSize(55));
-        Assert.assertEquals(55, DbFileStorageManager.getAndIncrementCurrentActiviSize(10));
-        Assert.assertNotEquals(55, DbFileStorageManager.getAndIncrementCurrentActiviSize(0));
-        Assert.assertEquals(65, DbFileStorageManager.getAndIncrementCurrentActiviSize(0));
+        Assert.assertNotEquals(50, DbFileStorageManager.getAndIncrementCurrentActiveSize(0));
+        Assert.assertEquals(0, DbFileStorageManager.getAndIncrementCurrentActiveSize(55));
+        Assert.assertEquals(55, DbFileStorageManager.getAndIncrementCurrentActiveSize(10));
+        Assert.assertNotEquals(55, DbFileStorageManager.getAndIncrementCurrentActiveSize(0));
+        Assert.assertEquals(65, DbFileStorageManager.getAndIncrementCurrentActiveSize(0));
 
         Assert.assertEquals(3, DbFileStorageManager.getActiveDbFileId());
     }
 
 
-    @Ignore
+    @Test
     public void testInsertTooMuchData() {
         try {
-            DbFileStorageManager.getAndIncrementCurrentActiviSize(GlobalConfig.MAX_FILE_SIZE + 1);
+            DbFileStorageManager.getAndIncrementCurrentActiveSize(GlobalConfig.MAX_FILE_SIZE + 1);
         } catch (DataAccessException e) {
             Assert.assertEquals(e.getCode(), ExceptionEnum.DATA_IS_TOO_LONG.getCode());
         }

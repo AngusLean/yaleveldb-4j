@@ -18,6 +18,7 @@ import java.util.Map;
  * @author anguslean
  * @Date 2018/3/26
  */
+@SuppressWarnings("unchecked")
 public class IDbFileWriterLocalImplTest extends TestBase{
     private IDbFileWriter iDbFileWriter;
     private String dbPath;

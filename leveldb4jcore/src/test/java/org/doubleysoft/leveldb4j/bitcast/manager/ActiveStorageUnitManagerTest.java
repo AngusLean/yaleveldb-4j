@@ -8,6 +8,7 @@ import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
 
+@SuppressWarnings("unchecked")
 public class ActiveStorageUnitManagerTest {
     private YaKVDb4j<String> yaKVDb4j;
     private String relativePath = "./test/";

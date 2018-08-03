@@ -25,7 +25,7 @@ public class IDbDataWriterSequnceImpl implements IDbDataWriter {
         long dataLength = data.getKeyLen() + data.getValLen() + 8;
         //try to get current active file size, if data is too long , it will create a new file
         //call this method before write to db file
-        long dataPos = DbFileStorageManager.getAndIncrementCurrentActiviSize(dataLength);
+        long dataPos = DbFileStorageManager.getAndIncrementCurrentActiveSize(dataLength);
 
         IDbFileWriter iDbFileWriter = DbFileStorageManager.getDbFileWriter();
         iDbFileWriter.appendInt(data.getKeyLen());
