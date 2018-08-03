@@ -2,31 +2,28 @@ package org.doubleysoft.leveldb4j.bitcast;
 
 import org.apache.commons.io.FileUtils;
 import org.doubleysoft.leveldb4j.GlobalConfig;
-import org.doubleysoft.leveldb4j.api.YaKVDb4j;
 import org.doubleysoft.leveldb4j.api.exceptions.DataAccessException;
 import org.doubleysoft.leveldb4j.bitcast.manager.DbFileStorageManager;
 import org.junit.*;
-import org.junit.runners.MethodSorters;
 
 import java.io.File;
 import java.util.concurrent.atomic.AtomicInteger;
 
 /**
- * @author anguslean
- * @Date 2018/4/25
+ * @author dongyang.yu
+ * @email dongyang.yu@anxincloud.com
  */
-@SuppressWarnings("unchecked")
-@FixMethodOrder(MethodSorters.NAME_ASCENDING)
-public class YakvDb4JBitCastImplTest {
-    private YaKVDb4j yaKVDb4j;
-
+public class KvDbBitCastImplTest {
     private static AtomicInteger atomicInteger = new AtomicInteger();
+    private KvDbBitCastImpl yaKVDb4j;
     private String path = "./dbBitCastImplTest/";
 
     @Before
     public void init() {
         path = "./dbBitCastImplTest" + atomicInteger.getAndIncrement() + "/";
-        yaKVDb4j = BitCastContext.init(path);
+        DbFileStorageManager.init(path);
+        yaKVDb4j = new KvDbBitCastImpl();
+//        yaKVDb4j = BitCastContext.init(path);
     }
 
     @After
@@ -90,10 +87,9 @@ public class YakvDb4JBitCastImplTest {
         basePutAndQuery("longval", sb.toString());
     }
 
-    private void basePutAndQuery(String key, String val){
+    private void basePutAndQuery(String key, String val) {
         yaKVDb4j.put(key, val);
         Assert.assertEquals(val, yaKVDb4j.get(key));
         System.out.println();
     }
-
 }
