@@ -1,5 +1,6 @@
 package org.doubleysoft.leveldb4j.bitcast;
 
+import org.apache.commons.io.FileUtils;
 import org.doubleysoft.leveldb4j.GlobalConfig;
 import org.doubleysoft.leveldb4j.api.YaKVDb4j;
 import org.doubleysoft.leveldb4j.api.exceptions.DataAccessException;
@@ -7,6 +8,7 @@ import org.doubleysoft.leveldb4j.bitcast.manager.DbFileStorageManager;
 import org.junit.*;
 import org.junit.runners.MethodSorters;
 
+import java.io.File;
 import java.util.concurrent.atomic.AtomicInteger;
 
 /**
@@ -29,6 +31,7 @@ public class YakvDb4JBitCastImplTest {
     @After
     public void resetEnv() {
         DbFileStorageManager.closeAllFile();
+        FileUtils.deleteQuietly(new File(path));
     }
 
 
@@ -58,7 +61,7 @@ public class YakvDb4JBitCastImplTest {
         basePutAndQuery("___key", "\uE076\uE07F\uE09A\uA910\uFA910");
     }
 
-    @Test
+    @Ignore
     public void putLongData() {
         //try to insert long data one by one, it will create new db file
         StringBuilder sb = new StringBuilder();
@@ -89,6 +92,7 @@ public class YakvDb4JBitCastImplTest {
     private void basePutAndQuery(String key, String val){
         yaKVDb4j.put(key, val);
         Assert.assertEquals(val, yaKVDb4j.get(key));
+        System.out.println();
     }
 
 }

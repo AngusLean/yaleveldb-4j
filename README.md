@@ -17,8 +17,13 @@ delete(key);
 
 - will test
 
-- it can embed you Java application easily, no need to install any other
+- it can embed you Java Application easily, no need to install any other
 software.
+
+### TODO
+- [ ] async compaction
+- [ ] concurrence support
+
 
 ### usage
 
