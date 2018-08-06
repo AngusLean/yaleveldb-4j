@@ -6,6 +6,7 @@ import org.doubleysoft.leveldb4j.api.YaKVDb4j;
 import org.doubleysoft.leveldb4j.bitcast.BitCastContext;
 import org.doubleysoft.leveldb4j.bitcast.model.DbStorageUnitModel;
 import org.doubleysoft.leveldb4j.bitcast.util.StorageUtil;
+import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Assert;
 import org.junit.Test;
@@ -25,6 +26,12 @@ public class ActiveStorageUnitBaseTest {
     @AfterClass
     public static void clean() {
         StorageUtil.cleanTestBaseDie();
+
+    }
+
+    @After
+    public void cleanThis() {
+        FileUtils.deleteQuietly(new File(relativePath));
     }
 
     @Test
